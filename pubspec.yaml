@@ -37,6 +37,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   record: ^4.4.4
   audioplayers: ^5.1.0
+  camera:
+  path_provider: 
+  path:
+  image_picker:
+  sqflite: ^2.3.0
+  dynamic_color: ^1.4.0
 
 dev_dependencies:
   flutter_test:
