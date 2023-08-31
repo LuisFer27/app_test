@@ -43,7 +43,7 @@ dependencies:
   image_picker:
   sqflite: ^2.3.0
   dynamic_color: ^1.4.0
-
+  video_player:
 dev_dependencies:
   flutter_test:
     sdk: flutter

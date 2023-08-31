@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_helper.dart';
-class HomeScreen extends StatefulWidget {
+class ListPage extends StatefulWidget {
+    const ListPage ({super.key, required this.title});
+  final String title;
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ListPage> createState() => _ListPageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _allData = [];
 
   bool _isLoading = true;

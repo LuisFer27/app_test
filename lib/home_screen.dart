@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/record/record.dart';
 import 'package:app_test/profile/photo_screen.dart';
-
+import 'package:app_test/video/video_record.dart';
+import 'package:app_test/list/list.dart';
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -40,7 +41,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(builder: (context)=> const PhotoScreen(title: 'Tomar foto'))
                 )
               }
-            )
+            ),
+                         ElevatedButton(
+              child: const Text("Tomar video"),
+              onPressed: ()=>{
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context)=> const VideoRecord(title: 'Tomar video'))
+                )
+              }
+            ),
+                                     ElevatedButton(
+              child: const Text("Ver lista"),
+              onPressed: ()=>{
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context)=> const ListPage(title: 'Ver lista'))
+                )
+              }
+            ),
           ],
         ),
       ),
