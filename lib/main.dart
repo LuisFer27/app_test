@@ -9,6 +9,7 @@ void main() {
 
   static final _defaultLightColorScheme =
     ColorScheme.fromSwatch(primarySwatch: Colors.blue);
+    
 
 static final _defaultDarkColorScheme = ColorScheme.fromSwatch(
     primarySwatch: Colors.blue, brightness: Brightness.dark);

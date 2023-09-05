@@ -4,6 +4,8 @@ import 'package:app_test/profile/photo_screen.dart';
 import 'package:app_test/video/video_record.dart';
 import 'package:app_test/list/list.dart';
 import 'package:app_test/geolocalization/geolocalization.dart';
+import 'package:app_test/view/section/menu_button.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -16,58 +18,72 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Home',
-            ),
-            ElevatedButton(
-                child: const Text("Grabar audio"),
-                onPressed: () => {
-                      Navigator.push(
+        child: Container(
+          margin: const EdgeInsets.all(40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const Text(
+                'Home',
+              ),
+              MenuButton(
+                  menuText: 'Grabar audio',
+                  onTap: () => {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const RecordPage(title: 'Grabar audio')))
-                    }),
-            ElevatedButton(
-                child: const Text("Tomar foto"),
-                onPressed: () => {
-                      Navigator.push(
+                            builder: (context) =>
+                                const RecordPage(title: 'Grabar audio'),
+                          ),
+                        ),
+                      }),
+              MenuButton(
+                  menuText: 'Tomar foto',
+                  onTap: () => {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const PhotoScreen(title: 'Tomar foto')))
-                    }),
-            ElevatedButton(
-                child: const Text("Tomar video"),
-                onPressed: () => {
-                      Navigator.push(
+                            builder: (context) =>
+                                const PhotoScreen(title: 'Tomar foto'),
+                          ),
+                        ),
+                      }),
+              MenuButton(
+                  menuText: 'Tomar video',
+                  onTap: () => {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const VideoRecord(title: 'Tomar video')))
-                    }),
-            ElevatedButton(
-                child: const Text("Ver lista"),
-                onPressed: () => {
-                      Navigator.push(
+                            builder: (context) =>
+                                const VideoRecord(title: 'Tomar video'),
+                          ),
+                        ),
+                      }),
+              MenuButton(
+                  menuText: 'Ver lista',
+                  onTap: () => {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const ListPage(title: 'Ver lista')))
-                    }),
-            ElevatedButton(
-                child: const Text("Ver Ubicación"),
-                onPressed: () => {
-                      Navigator.push(
+                            builder: (context) =>
+                                const ListPage(title: 'Ver lista'),
+                          ),
+                        ),
+                      }),
+              MenuButton(
+                  menuText: 'Grabar audio',
+                  onTap: () => {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const GeolocatorPage(title: 'Ver ubicación')))
-                    })
-          ],
+                            builder: (context) =>
+                                const GeolocatorPage(title: 'Ver ubicación'),
+                          ),
+                        ),
+                      }),
+            ],
+          ),
         ),
       ),
     );

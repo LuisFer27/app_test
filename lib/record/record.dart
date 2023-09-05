@@ -89,6 +89,7 @@ class _RecordPageState extends State<RecordPage> {
             const SizedBox(
               height: 25,
             ),
+            // ignore: unnecessary_null_comparison
             if (!isRecording && audioPath != null)
               ElevatedButton(
                 onPressed: playRecording,
