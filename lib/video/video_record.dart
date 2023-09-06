@@ -1,7 +1,8 @@
-import 'package:app_test/controller/video_controller.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+
 class VideoRecord extends StatefulWidget {
   const VideoRecord({super.key, required this.title});
   final String title;
@@ -10,46 +11,124 @@ class VideoRecord extends StatefulWidget {
 }
 
 class _VideoRecordState extends State<VideoRecord> {
-String ? imagePath;
-  String ? videoPath;
-late VideoPlayerController _controller;
+  File? video;
+  VideoPlayerController? videocontroller;
+  Future<void> pickvideofromgallery() async {
+    final videopicked =
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (videopicked != null) {
+      video = File(videopicked.path);
+      videocontroller = VideoPlayerController.file(video!)
+        ..initialize().then((_) {
+          setState(() {});
+          videocontroller!.play();
+          videocontroller!.setLooping(true);
+        });
+    }
+  }
+
+  Future<void> pickvideofromcamera() async {
+    final videopicked = await ImagePicker().pickVideo(
+        source: ImageSource.camera,
+        preferredCameraDevice: CameraDevice.rear,
+        maxDuration: const Duration(seconds: 05));
+    if (videopicked != null) {
+      video = File(videopicked.path);
+      videocontroller = VideoPlayerController.file(video!)
+        ..initialize().then((_) {
+          setState(() {});
+          videocontroller!.play();
+          videocontroller!.setLooping(true);
+        });
+    }
+  }
+
+  @override
+  void dispose() {
+    videocontroller!.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
+appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Selccionar video'),
-            (videoPath == null) ? Container() : AspectRatioVideo(_controller),
-            ElevatedButton(
-              child: Text('Grabar Video'),
-              onPressed: () async {
-                final ImagePicker _picker=ImagePicker();
-                XFile? _pickedFile =
-                 await _picker.pickVideo(
-                  source: ImageSource.camera,
-                  maxDuration: const Duration(seconds: 10),
-                );
-                videoPath=_pickedFile?.path;
-               
-                _controller=VideoPlayerController.networkUrl(videoPath as Uri);
-                _controller.initialize();
-                _controller.setLooping(true);
-                _controller.play();
-                setState(() {
-                  
-                });
-              },
+            video == null
+                ? const SizedBox(
+                    height: 400,
+                    width: 300,
+                    child: Placeholder(),
+                  )
+                : ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxHeight: 400, maxWidth: 300),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {});
+                        videocontroller!.value.isPlaying
+                            ? videocontroller!.pause()
+                            : videocontroller!.play();
+                      },
+                      child: AspectRatio(
+                        aspectRatio: videocontroller!.value.aspectRatio,
+                        child: Stack(children: [
+                          VideoPlayer(videocontroller!),
+                          Center(
+                            child: videocontroller!.value.isPlaying
+                                ? const SizedBox()
+                                : const SizedBox.square(
+                                    dimension: 100,
+                                    //child: Image.asset('assets/playicon.png'),
+                                  ),
+                          )
+                        ]),
+                      ),
+                    ),
+                  ),
+            const SizedBox(
+              height: 30,
             ),
+            ElevatedButton.icon(
+                onPressed: () => pickvideofromgallery(),
+                style: ButtonStyle(
+                    minimumSize: const MaterialStatePropertyAll(Size(220, 50)),
+                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                   ),
+                icon: const SizedBox.square(
+                  dimension: 35,
+                  //child: Image.asset('assets/video.png'),
+                ),
+                label: const Text(
+                  'Seleccionar video',
+
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton.icon(
+                onPressed: () => pickvideofromcamera(),
+                style: ButtonStyle(
+                    minimumSize: const MaterialStatePropertyAll(Size(220, 50)),
+                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                  ),
+                icon: const SizedBox.square(
+                  dimension: 35,
+                  //child: Image.asset('assets/camera.png'),
+                ),
+                label: const Text(
+                  'Grabar video',
+
+                )),
           ],
-        ),
-      ),
-    );
+        )));
   }
 }
-
-
