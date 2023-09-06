@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       }),
               MenuButton(
-                  menuText: 'Grabar audio',
+                  menuText: 'Ver ubicación',
                   onTap: () => {
                         Navigator.push(
                           context,
