@@ -4,7 +4,7 @@ import 'package:app_test/profile/photo_screen.dart';
 import 'package:app_test/video/video_record.dart';
 import 'package:app_test/list/list.dart';
 import 'package:app_test/geolocalization/geolocalization.dart';
-import 'package:app_test/view/section/menu_button.dart';
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              MenuButton(
+              Btns(
                   menuText: 'Grabar audio',
                   onTap: () => {
                         Navigator.push(
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       }),
-              MenuButton(
+              Btns(
                   menuText: 'Tomar foto',
                   onTap: () => {
                         Navigator.push(
@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       }),
-              MenuButton(
+              Btns(
                   menuText: 'Tomar video',
                   onTap: () => {
                         Navigator.push(
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       }),
-              MenuButton(
+              Btns(
                   menuText: 'Ver lista',
                   onTap: () => {
                         Navigator.push(
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       }),
-              MenuButton(
+              Btns(
                   menuText: 'Ver ubicación',
                   onTap: () => {
                         Navigator.push(

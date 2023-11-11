@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class PhotoScreen extends StatefulWidget {
    const PhotoScreen ({super.key, required this.title});
@@ -74,54 +74,26 @@ class _PhotoScreenState extends State<PhotoScreen> {
             const SizedBox(
               height: 30,
             ),
-            ElevatedButton.icon(
-                onPressed: () => pickimagefromgallery(),
-                style: const ButtonStyle(
-                    minimumSize: MaterialStatePropertyAll(Size(220, 40)),
-                ),
-                icon: const SizedBox.square(
-                  dimension: 35,
-                  
-                ),
-                label: const Text(
-                  'Seleccionar imagen',
-                  //style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                )),
+             Btns(
+              menuText: 'Seleccionar imagen', 
+              onTap: () => pickimagefromgallery()
+              ),
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton.icon(
-                onPressed: () => pickimagefromcamera(),
-                style: const ButtonStyle(
-                    minimumSize: MaterialStatePropertyAll(Size(220, 40)),
-                    ),
-                icon: const SizedBox.square(
-                  dimension: 35,
-                  
-                ),
-                label: const Text(
-                  'Abrir camara',
-                  //style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                )),
+                  Btns(menuText:'Abrir camara',
+                  onTap:() => pickimagefromcamera()
+                  ),
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton.icon(
-                onPressed: () {
+          
+                Btns(
+                  menuText:'Seleccionar multiples imagenes',
+                  onTap:() {
                   multipleimage.removeRange(0, multipleimage.length);
                   pickmultipleimage();
-                },
-                style: const ButtonStyle(
-                    minimumSize: MaterialStatePropertyAll(Size(220, 40)),
-                   ),
-                icon: const SizedBox.square(
-                  dimension: 35,
-                  //child: Image.asset('assets/multipleimage.png'),
-                ),
-                label: const Text(
-                  'Seleccionar multiples imagenes',
-                  //style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                )),
+                }),
             const SizedBox(
               height: 30,
             ),

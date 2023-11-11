@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 class VideoRecord extends StatefulWidget {
   const VideoRecord({super.key, required this.title});
   final String title;
@@ -95,39 +95,12 @@ appBar: AppBar(
             const SizedBox(
               height: 30,
             ),
-            ElevatedButton.icon(
-                onPressed: () => pickvideofromgallery(),
-                style: ButtonStyle(
-                    minimumSize: const MaterialStatePropertyAll(Size(220, 50)),
-                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                   ),
-                icon: const SizedBox.square(
-                  dimension: 35,
-                  //child: Image.asset('assets/video.png'),
-                ),
-                label: const Text(
-                  'Seleccionar video',
-
-                )),
+                Btns(menuText:  'Seleccionar video', onTap:() => pickvideofromgallery()),
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton.icon(
-                onPressed: () => pickvideofromcamera(),
-                style: ButtonStyle(
-                    minimumSize: const MaterialStatePropertyAll(Size(220, 50)),
-                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                  ),
-                icon: const SizedBox.square(
-                  dimension: 35,
-                  //child: Image.asset('assets/camera.png'),
-                ),
-                label: const Text(
-                  'Grabar video',
+                Btns(menuText: 'Grabar video', onTap: () => pickvideofromcamera())
 
-                )),
           ],
         )));
   }

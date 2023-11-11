@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:record/record.dart';
 import 'package:audioplayers/audioplayers.dart';
-
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({super.key, required this.title});
@@ -80,20 +80,17 @@ class _RecordPageState extends State<RecordPage> {
                   fontSize: 20,
                 ),
               ),
-            ElevatedButton(
-              onPressed: isRecording ? stopRecording : startRecording,
-              child: isRecording
-                  ? const Text('Parar la Grabación')
-                  : const Text('Empezar Grabación'),
-            ),
+            Btns(menuText: isRecording
+                  ? 'Parar la Grabación'
+                  : 'Empezar Grabación', onTap:  isRecording ? stopRecording : startRecording),
             const SizedBox(
               height: 25,
             ),
             if (!isRecording && audioPath != null)
-              ElevatedButton(
-                onPressed: playRecording,
-                child: const Text('Reproducir la grabación'),
-              ),
+               Btns(
+                menuText:'Reproducir la grabación' ,
+                 onTap: playRecording
+                 )
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
