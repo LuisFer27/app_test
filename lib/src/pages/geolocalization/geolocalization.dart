@@ -1,62 +1,43 @@
-import'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import'package:geolocator/geolocator.dart';
+import 'package:app_test/src/controllers/geolocalization_controller.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =
     'pk.eyJ1IjoicGl0bWFjIiwiYSI6ImNsY3BpeWxuczJhOTEzbnBlaW5vcnNwNzMifQ.ncTzM4bW-jpq-hUFutnR1g';
 
 class GeolocatorPage extends StatefulWidget {
-  const GeolocatorPage ({super.key,required this.title});
-    final String title;
+  const GeolocatorPage({super.key, required this.title});
+  final String title;
 
   @override
   State<GeolocatorPage> createState() => _GeolocatorPageState();
 }
 
 class _GeolocatorPageState extends State<GeolocatorPage> {
-
-  LatLng? myPosition;
-
-  Future<Position> determinePosition() async {
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('error');
-      }
-    }
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void getCurrentLocation() async {
-    Position position = await determinePosition();
-    setState(() {
-      myPosition = LatLng(position.latitude, position.longitude);
-      print(myPosition);
-    });
-  }
+  late GeolocalizationController geolocalizationController;
 
   @override
   void initState() {
-    getCurrentLocation();
+    geolocalizationController = GeolocalizationController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-          appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-        body: myPosition == null
+      body: geolocalizationController.myPosition == null
           ? const CircularProgressIndicator()
           : FlutterMap(
               options: MapOptions(
-                  center: myPosition, minZoom: 5, maxZoom: 25, zoom: 18),
+                  center: geolocalizationController.myPosition,
+                  minZoom: 5,
+                  maxZoom: 25,
+                  zoom: 18),
               nonRotatedChildren: [
                 TileLayer(
                   urlTemplate:
@@ -69,7 +50,7 @@ class _GeolocatorPageState extends State<GeolocatorPage> {
                 MarkerLayer(
                   markers: [
                     Marker(
-                      point: myPosition!,
+                      point: geolocalizationController.myPosition!,
                       builder: (context) {
                         return Container(
                           child: const Icon(

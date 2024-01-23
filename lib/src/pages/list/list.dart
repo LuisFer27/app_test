@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_helper.dart';
+import 'package:app_test/src/widgets/List/listData.dart';
+
 class ListPage extends StatefulWidget {
-    const ListPage ({super.key, required this.title});
+  const ListPage({super.key, required this.title});
   final String title;
   @override
   State<ListPage> createState() => _ListPageState();
@@ -9,7 +11,6 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _allData = [];
-
   bool _isLoading = true;
 
   void _refreshData() async {
@@ -122,58 +123,18 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Operaciones CRUD"),
+        title: Text(widget.title),
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: _allData.length,
-              itemBuilder: (context, index) => Card(
-                margin: const EdgeInsets.all(15),
-                child: ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      _allData[index]['title'],
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  subtitle: Text(
-                    _allData[index]['desc'],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          showBottomSheet(_allData[index]['id']);
-                        },
-                        icon: const Icon(
-                          Icons.edit,
-                          color: Colors.indigo,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          _deleteData(_allData[index]['id']);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.redAccent,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+          ? const Center(child: CircularProgressIndicator())
+          : ListData(
+              allData: _allData,
+              showBottomSheet: showBottomSheet,
+              deleteData: _deleteData,
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBottomSheet(null),

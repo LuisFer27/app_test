@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:app_test/record/record.dart';
-import 'package:app_test/profile/photo_screen.dart';
-import 'package:app_test/video/video_record.dart';
-import 'package:app_test/list/list.dart';
-import 'package:app_test/geolocalization/geolocalization.dart';
+import 'package:app_test/src/pages/record/record.dart';
+import 'package:app_test/src/pages/profile/photo_screen.dart';
+import 'package:app_test/src/pages/video/video_record.dart';
+import 'package:app_test/src/pages/list/list.dart';
+import 'package:app_test/src/pages/geolocalization/geolocalization.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,9 +17,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-           appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title:const Center(
+        title: const Center(
           child: Text(
             'Aplicación de prueba',
             textAlign: TextAlign.center,

@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:app_test/src/controllers/photo_screen_controller.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class PhotoScreen extends StatefulWidget {
-   const PhotoScreen ({super.key, required this.title});
+  const PhotoScreen({super.key, required this.title});
   final String title;
 
   @override
@@ -13,41 +12,17 @@ class PhotoScreen extends StatefulWidget {
 }
 
 class _PhotoScreenState extends State<PhotoScreen> {
-  File? image;
-  List<XFile> multipleimage = [];
-
-  Future<void> pickimagefromgallery() async {
-    final imagepicked = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-    if (imagepicked != null) {
-      setState(() {
-        image = File(imagepicked.path);
-      });
-    }
-  }
-
-  Future<void> pickimagefromcamera() async {
-    final imagepicked =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (imagepicked != null) {
-      setState(() {
-        image = File(imagepicked.path);
-      });
-    }
-  }
-
-  Future<void> pickmultipleimage() async {
-    List<XFile> imagepicked = await ImagePicker().pickMultiImage();
-    setState(() {
-      multipleimage.addAll(imagepicked);
-    });
+  late PhotoScreenController photoScreenController;
+  @override
+  void initState() {
+    photoScreenController = PhotoScreenController();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-   appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
@@ -59,14 +34,14 @@ class _PhotoScreenState extends State<PhotoScreen> {
             const SizedBox(
               height: 10,
             ),
-            image == null
+            photoScreenController.image == null
                 ? const SizedBox(
                     height: 400,
                     width: 300,
                     child: Placeholder(),
                   )
                 : Image.file(
-                    image!,
+                    photoScreenController.image!,
                     height: 400,
                     width: 300,
                     fit: BoxFit.contain,
@@ -74,40 +49,40 @@ class _PhotoScreenState extends State<PhotoScreen> {
             const SizedBox(
               height: 30,
             ),
-             Btns(
-              menuText: 'Seleccionar imagen', 
-              onTap: () => pickimagefromgallery()
-              ),
+            Btns(
+                menuText: 'Seleccionar imagen',
+                onTap: () => photoScreenController.pickimagefromgallery()),
             const SizedBox(
               height: 10,
             ),
-                  Btns(menuText:'Abrir camara',
-                  onTap:() => pickimagefromcamera()
-                  ),
+            Btns(
+                menuText: 'Abrir camara',
+                onTap: () => photoScreenController.pickimagefromcamera()),
             const SizedBox(
               height: 10,
             ),
-          
-                Btns(
-                  menuText:'Seleccionar multiples imagenes',
-                  onTap:() {
-                  multipleimage.removeRange(0, multipleimage.length);
-                  pickmultipleimage();
+            Btns(
+                menuText: 'Seleccionar multiples imagenes',
+                onTap: () {
+                  photoScreenController.multipleimage.removeRange(
+                      0, photoScreenController.multipleimage.length);
+                  photoScreenController.pickmultipleimage();
                 }),
             const SizedBox(
               height: 30,
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
-                  maxHeight: multipleimage.length * 420, maxWidth: 300),
+                  maxHeight: photoScreenController.multipleimage.length * 420,
+                  maxWidth: 300),
               child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: multipleimage.length,
+                  itemCount: photoScreenController.multipleimage.length,
                   itemBuilder: ((context, index) {
                     return Column(
                       children: [
                         Image.file(
-                          File(multipleimage[index].path),
+                          File(photoScreenController.multipleimage[index].path),
                           height: 400,
                           width: 300,
                         ),
