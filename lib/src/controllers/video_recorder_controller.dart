@@ -4,39 +4,44 @@ import 'package:video_player/video_player.dart';
 
 class VideoRecorderController {
   File? video;
-  VideoPlayerController? videocontroller;
+  VideoPlayerController? videoController;
 
   Future<void> pickVideoFromGallery() async {
-    final videopicked =
+    final pickedVideo =
         await ImagePicker().pickVideo(source: ImageSource.gallery);
-    if (videopicked != null) {
-      video = File(videopicked.path);
-      videocontroller = VideoPlayerController.file(video!)
+    if (pickedVideo != null) {
+      video = File(pickedVideo.path);
+      videoController = VideoPlayerController.file(video!)
         ..initialize().then((_) {
-          videocontroller!.play();
-          videocontroller!.setLooping(true);
+          videoController!.play();
+          videoController!.setLooping(true);
         });
     }
   }
 
   Future<void> pickVideoFromCamera() async {
-    final videopicked = await ImagePicker().pickVideo(
-        source: ImageSource.camera,
-        preferredCameraDevice: CameraDevice.rear,
-        maxDuration: const Duration(seconds: 05));
-    if (videopicked != null) {
-      video = File(videopicked.path);
-      videocontroller = VideoPlayerController.file(video!)
+    final pickedVideo = await ImagePicker().pickVideo(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.rear,
+      maxDuration: const Duration(seconds: 5),
+    );
+    if (pickedVideo != null) {
+      video = File(pickedVideo.path);
+      videoController = VideoPlayerController.file(video!)
         ..initialize().then((_) {
-          videocontroller!.play();
-          videocontroller!.setLooping(true);
+          videoController!.play();
+          videoController!.setLooping(true);
         });
     }
   }
 
   void toggleVideoPlayback() {
-    videocontroller!.value.isPlaying
-        ? videocontroller!.pause()
-        : videocontroller!.play();
+    videoController!.value.isPlaying
+        ? videoController!.pause()
+        : videoController!.play();
+  }
+
+  void dispose() {
+    videoController?.dispose();
   }
 }

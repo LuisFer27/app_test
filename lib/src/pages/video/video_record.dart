@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
@@ -21,14 +20,20 @@ class _VideoRecordState extends State<VideoRecord> {
   }
 
   @override
+  void dispose() {
+    videoRecorderController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: Center(
-            child: Column(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             videoRecorderController.video == null
@@ -47,35 +52,44 @@ class _VideoRecordState extends State<VideoRecord> {
                       },
                       child: AspectRatio(
                         aspectRatio: videoRecorderController
-                            .videocontroller!.value.aspectRatio,
-                        child: Stack(children: [
-                          VideoPlayer(videoRecorderController.videocontroller!),
-                          Center(
-                            child: videoRecorderController
-                                    .videocontroller!.value.isPlaying
-                                ? const SizedBox()
-                                : const SizedBox.square(
-                                    dimension: 100,
-                                    //child: Image.asset('assets/playicon.png'),
-                                  ),
-                          )
-                        ]),
+                            .videoController!.value.aspectRatio,
+                        child: Stack(
+                          children: [
+                            VideoPlayer(
+                                videoRecorderController.videoController!),
+                            Center(
+                              child: videoRecorderController
+                                      .videoController!.value.isPlaying
+                                  ? const SizedBox()
+                                  : const SizedBox.square(
+                                      dimension: 100,
+                                      //child: Image.asset('assets/playicon.png'),
+                                    ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-            const SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             Btns(
-                menuText: 'Seleccionar video',
-                onTap: () => videoRecorderController.pickVideoFromGallery()),
-            const SizedBox(
-              height: 10,
+              menuText: 'Seleccionar video',
+              onTap: () async {
+                await videoRecorderController.pickVideoFromGallery();
+                setState(() {});
+              },
             ),
+            const SizedBox(height: 10),
             Btns(
-                menuText: 'Grabar video',
-                onTap: () => videoRecorderController.pickVideoFromCamera())
+              menuText: 'Grabar video',
+              onTap: () async {
+                await videoRecorderController.pickVideoFromCamera();
+                setState(() {});
+              },
+            ),
           ],
-        )));
+        ),
+      ),
+    );
   }
 }

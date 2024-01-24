@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
-import 'package:record/record.dart';
 
+import 'package:record/record.dart';
 // clase AudioRecorderController va ligado al controlador
+
 class AudioRecorderController {
   late Record audioRecord;
   late AudioPlayer audioPlayer;
@@ -22,7 +22,8 @@ class AudioRecorderController {
         isRecording = true;
       }
     } catch (e) {
-      print('Error al iniciar la grabación: $e');
+      print('Error starting recording: $e');
+      isRecording = false;
     }
   }
 
@@ -30,18 +31,27 @@ class AudioRecorderController {
     try {
       String? path = await audioRecord.stop();
       isRecording = false;
-      audioPath = path!;
+      audioPath = path ?? '';
     } catch (e) {
-      print('Error al intentar parar la grabación: $e');
+      print('Error stopping recording: $e');
     }
   }
 
   Future<void> playRecording() async {
     try {
-      Source urlSource = UrlSource(audioPath);
-      await audioPlayer.play(urlSource);
+      if (audioPath.isNotEmpty) {
+        Source urlSource = UrlSource(audioPath);
+        await audioPlayer.play(urlSource);
+      } else {
+        print('Audio path is empty.');
+      }
     } catch (e) {
-      print('Error al reproducir la grabación: $e');
+      print('Error playing recording: $e');
     }
+  }
+
+  void dispose() {
+    audioRecord.dispose();
+    audioPlayer.dispose();
   }
 }

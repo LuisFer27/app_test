@@ -3,27 +3,27 @@ import 'package:image_picker/image_picker.dart';
 
 class PhotoScreenController {
   File? image;
-  List<XFile> multipleimage = [];
+  List<File> multipleImages = [];
 
-  Future<void> pickimagefromgallery() async {
-    final imagepicked = await ImagePicker().pickImage(
+  Future<void> pickImageFromGallery() async {
+    final imagePicked = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    if (imagepicked != null) {
-      image = File(imagepicked.path);
+    if (imagePicked != null) {
+      image = File(imagePicked.path);
     }
   }
 
-  Future<void> pickimagefromcamera() async {
-    final imagepicked =
+  Future<void> pickImageFromCamera() async {
+    final imagePicked =
         await ImagePicker().pickImage(source: ImageSource.camera);
-    if (imagepicked != null) {
-      image = File(imagepicked.path);
+    if (imagePicked != null) {
+      image = File(imagePicked.path);
     }
   }
 
-  Future<void> pickmultipleimage() async {
-    List<XFile> imagepicked = await ImagePicker().pickMultiImage();
-    multipleimage.addAll(imagepicked);
+  Future<void> pickMultipleImages() async {
+    List<XFile> imagesPicked = await ImagePicker().pickMultiImage();
+    multipleImages.addAll(imagesPicked.map((xFile) => File(xFile.path)));
   }
 }

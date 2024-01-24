@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+//import 'package:audioplayers/audioplayers.dart';
+//import 'package:record/record.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 import 'package:app_test/src/controllers/audio_recorder_controller.dart';
 
@@ -12,10 +13,17 @@ class RecordPage extends StatefulWidget {
 
 class _RecordPageState extends State<RecordPage> {
   late AudioRecorderController audioRecorderController;
+
   @override
   void initState() {
     audioRecorderController = AudioRecorderController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    audioRecorderController.dispose();
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -36,23 +44,30 @@ class _RecordPageState extends State<RecordPage> {
                 ),
               ),
             Btns(
-                menuText: audioRecorderController.isRecording
-                    ? 'Parar la Grabación'
-                    : 'Empezar Grabación',
-                onTap: audioRecorderController.isRecording
-                    ? audioRecorderController.stopRecording
-                    : audioRecorderController.startRecording),
+              menuText: audioRecorderController.isRecording
+                  ? 'Parar la Grabación'
+                  : 'Empezar Grabación',
+              onTap: () async {
+                if (audioRecorderController.isRecording) {
+                  await audioRecorderController.stopRecording();
+                } else {
+                  await audioRecorderController.startRecording();
+                }
+                setState(() {});
+              },
+            ),
             const SizedBox(
               height: 25,
             ),
             if (!audioRecorderController.isRecording &&
-                audioRecorderController.audioPath != null)
+                audioRecorderController.audioPath.isNotEmpty)
               Btns(
-                  menuText: 'Reproducir la grabación',
-                  onTap: audioRecorderController.playRecording)
+                menuText: 'Reproducir la grabación',
+                onTap: audioRecorderController.playRecording,
+              ),
           ],
         ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }

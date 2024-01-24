@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:app_test/src/controllers/photo_screen_controller.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
@@ -13,6 +12,7 @@ class PhotoScreen extends StatefulWidget {
 
 class _PhotoScreenState extends State<PhotoScreen> {
   late PhotoScreenController photoScreenController;
+
   @override
   void initState() {
     photoScreenController = PhotoScreenController();
@@ -29,72 +29,72 @@ class _PhotoScreenState extends State<PhotoScreen> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Center(
-            child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            photoScreenController.image == null
-                ? const SizedBox(
-                    height: 400,
-                    width: 300,
-                    child: Placeholder(),
-                  )
-                : Image.file(
-                    photoScreenController.image!,
-                    height: 400,
-                    width: 300,
-                    fit: BoxFit.contain,
-                  ),
-            const SizedBox(
-              height: 30,
-            ),
-            Btns(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              photoScreenController.image == null
+                  ? const SizedBox(
+                      height: 400,
+                      width: 300,
+                      child: Placeholder(),
+                    )
+                  : Image.file(
+                      photoScreenController.image!,
+                      height: 400,
+                      width: 300,
+                      fit: BoxFit.contain,
+                    ),
+              const SizedBox(height: 30),
+              Btns(
                 menuText: 'Seleccionar imagen',
-                onTap: () => photoScreenController.pickimagefromgallery()),
-            const SizedBox(
-              height: 10,
-            ),
-            Btns(
-                menuText: 'Abrir camara',
-                onTap: () => photoScreenController.pickimagefromcamera()),
-            const SizedBox(
-              height: 10,
-            ),
-            Btns(
-                menuText: 'Seleccionar multiples imagenes',
-                onTap: () {
-                  photoScreenController.multipleimage.removeRange(
-                      0, photoScreenController.multipleimage.length);
-                  photoScreenController.pickmultipleimage();
-                }),
-            const SizedBox(
-              height: 30,
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                  maxHeight: photoScreenController.multipleimage.length * 420,
-                  maxWidth: 300),
-              child: ListView.builder(
+                onTap: () async {
+                  await photoScreenController.pickImageFromGallery();
+                  setState(() {});
+                },
+              ),
+              const SizedBox(height: 10),
+              Btns(
+                menuText: 'Abrir cámara',
+                onTap: () async {
+                  await photoScreenController.pickImageFromCamera();
+                  setState(() {});
+                },
+              ),
+              const SizedBox(height: 10),
+              Btns(
+                menuText: 'Seleccionar múltiples imágenes',
+                onTap: () async {
+                  photoScreenController.multipleImages.clear();
+                  await photoScreenController.pickMultipleImages();
+                  setState(() {});
+                },
+              ),
+              const SizedBox(height: 30),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: photoScreenController.multipleImages.length * 420,
+                  maxWidth: 300,
+                ),
+                child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: photoScreenController.multipleimage.length,
+                  itemCount: photoScreenController.multipleImages.length,
                   itemBuilder: ((context, index) {
                     return Column(
                       children: [
                         Image.file(
-                          File(photoScreenController.multipleimage[index].path),
+                          photoScreenController.multipleImages[index],
                           height: 400,
                           width: 300,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        )
+                        const SizedBox(height: 10),
                       ],
                     );
-                  })),
-            )
-          ],
-        )),
+                  }),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

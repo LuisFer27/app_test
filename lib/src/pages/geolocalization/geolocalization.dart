@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:app_test/src/controllers/geolocalization_controller.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =
@@ -15,11 +17,21 @@ class GeolocatorPage extends StatefulWidget {
 }
 
 class _GeolocatorPageState extends State<GeolocatorPage> {
+  LatLng? myPosition;
   late GeolocalizationController geolocalizationController;
+
+  void getCurrentLocation() async {
+    Position position = await geolocalizationController.determinePosition();
+    setState(() {
+      myPosition = LatLng(position.latitude, position.longitude);
+      print(myPosition);
+    });
+  }
 
   @override
   void initState() {
     geolocalizationController = GeolocalizationController();
+    getCurrentLocation();
     super.initState();
   }
 
@@ -30,14 +42,11 @@ class _GeolocatorPageState extends State<GeolocatorPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: geolocalizationController.myPosition == null
+      body: myPosition == null
           ? const CircularProgressIndicator()
           : FlutterMap(
               options: MapOptions(
-                  center: geolocalizationController.myPosition,
-                  minZoom: 5,
-                  maxZoom: 25,
-                  zoom: 18),
+                  center: myPosition, minZoom: 5, maxZoom: 25, zoom: 18),
               nonRotatedChildren: [
                 TileLayer(
                   urlTemplate:
@@ -50,7 +59,7 @@ class _GeolocatorPageState extends State<GeolocatorPage> {
                 MarkerLayer(
                   markers: [
                     Marker(
-                      point: geolocalizationController.myPosition!,
+                      point: myPosition!,
                       builder: (context) {
                         return Container(
                           child: const Icon(
