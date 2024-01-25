@@ -47,6 +47,7 @@ dependencies:
   video_player:
   flutter_map: ^5.0.0
   latlong2: ^0.9.0
+  mysql1: ^0.20.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

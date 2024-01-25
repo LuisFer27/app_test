@@ -7,8 +7,8 @@ import 'package:app_test/src/pages/geolocalization/geolocalization.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
+  const MyHomePage({super.key, required this.title});
+  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -19,12 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Center(
-          child: Text(
-            'Aplicación de prueba',
-            textAlign: TextAlign.center,
-          ),
-        ),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Container(
