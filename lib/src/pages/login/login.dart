@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
-//import 'package:app_test/src/widgets/Buttons/btns.dart';
-//import 'package:app_test/src/controllers/connection/data_base_controller.dart';
 import 'package:app_test/src/pages/homescreen/home_screen.dart';
+import 'package:app_test/src/controllers/connection/data_base_controller.dart';
+import 'package:mysql1/mysql1.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  MySqlConnection? _connection;
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  //void initState() {
-  //   super.initState();
-  //   _connectToMySQL();
-  // }
-  //@override
-  //void dispose() {
-  //  _connection.close(); // Cerrar la conexión al salir de la página
-  //  super.dispose();
-  //}
+  @override
+  void initState() {
+    super.initState();
+    _connectToMySQL();
+  }
+
+  Future<void> _connectToMySQL() async {
+    try {
+      _connection = await MySQLService.connectToMySQL();
+    } catch (e) {
+      // Manejar errores de conexión aquí
+      print('Error de conexión: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,31 +87,23 @@ class _LoginPageState extends State<LoginPage> {
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                 child: Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Consulta a MySQL
-                        //var results = await _connection.query(
-                        //  'SELECT * FROM tu_tabla WHERE email = ? AND password = ?',
-                        //  [emailController.text, passwordController.text],
-                        //);
-                        //if (results.isNotEmpty) {
-                        //  Navigator.push(
-                        //    context,
-                        //    MaterialPageRoute(
-                        //      builder: (context) => const MyHomePage(
-                        //        title: 'Aplicación de prueba',
-                        //      ),
-                        //    ),
-                        //  );
-                        //}
-                        if (emailController.text == "admin@mail.com" &&
-                            passwordController.text == "123") {
+                    onPressed: () async {
+                      if (_connection != null &&
+                          _formKey.currentState!.validate()) {
+                        var results = await MySQLService.queryDatabase(
+                          _connection!,
+                          emailController.text,
+                          passwordController.text,
+                        );
+
+                        if (results.isNotEmpty) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const MyHomePage(
-                                      title: 'Aplicación de prueba',
-                                    )),
+                              builder: (context) => const MyHomePage(
+                                title: 'Aplicación de prueba',
+                              ),
+                            ),
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -113,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         }
                       } else {
+                        // Manejar el caso donde la conexión es nula
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Por favor llena los campos')),
+                          const SnackBar(content: Text('Error de conexión')),
                         );
                       }
                     },
@@ -128,5 +126,13 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    if (_connection != null) {
+      MySQLService.closeConnection(_connection!);
+    }
+    super.dispose();
   }
 }
