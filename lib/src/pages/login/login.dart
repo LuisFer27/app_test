@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/src/pages/homescreen/home_screen.dart';
-import 'package:app_test/src/controllers/connection/data_base_controller.dart';
-import 'package:mysql1/mysql1.dart';
+//import 'package:app_test/src/controllers/connection/data_base_controller.dart';
+import 'package:app_test/src/pages/login/register.dart';
+import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
+import 'package:app_test/src/widgets/TextField/textField.dart';
+import 'package:app_test/src/widgets/Buttons/btns.dart';
+import 'package:app_test/src/widgets/LinkButton/linkButton.dart';
+//import 'package:mysql1/mysql1.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,7 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  MySqlConnection? _connection;
+  //MySqlConnection? _connection;
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -19,17 +24,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _connectToMySQL();
+    //_connectToMySQL();
   }
 
-  Future<void> _connectToMySQL() async {
-    try {
-      _connection = await MySQLService.connectToMySQL();
-    } catch (e) {
-      // Manejar errores de conexión aquí
-      print('Error de conexión: $e');
-    }
-  }
+  // Future<void> _connectToMySQL() async {
+  //   try {
+  //     _connection = await MySQLService.connectToMySQL();
+  //   } catch (e) {
+  //     // Manejar errores de conexión aquí
+  //     print('Error de conexión: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,89 +55,73 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Correo electrónico"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un correo electrónico valido';
-                    }
-                    return null;
-                  },
-                ),
+              TextInput(
+                controller: emailController,
+                labelText: 'Correo electrónico',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor introduce un correo electrónico válido';
+                  }
+                  return null;
+                },
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                child: TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Contraseña"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce tu contraseña';
-                    }
-                    return null;
-                  },
-                ),
+              PasswordInput(
+                controller: passwordController,
+                labelText: 'Contraseña',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor introduce tu contraseña';
+                  }
+                  return null;
+                },
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_connection != null &&
-                          _formKey.currentState!.validate()) {
-                        var results = await MySQLService.queryDatabase(
-                          _connection!,
-                          emailController.text,
-                          passwordController.text,
-                        );
-
-                        if (results.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
+              Btns(
+                  menuText: 'Iniciar sesión',
+                  onTap: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (emailController.text == "admin@mail.com" &&
+                          passwordController.text == "123") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
                               builder: (context) => const MyHomePage(
-                                title: 'Aplicación de prueba',
-                              ),
-                            ),
-                          );
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Datos incorrectos')),
-                          );
-                        }
+                                    title: 'Aplicación de prueba',
+                                  )),
+                        );
                       } else {
-                        // Manejar el caso donde la conexión es nula
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Error de conexión')),
+                          const SnackBar(content: Text('Datos incorrectos')),
                         );
                       }
-                    },
-                    child: const Text('Iniciar sesión'),
-                  ),
-                ),
-              ),
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Por favor llena los campos')),
+                      );
+                    }
+                  }),
+              LinkButton(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage(
+                                title: 'Crear cuenta',
+                              )),
+                    );
+                  },
+                  text: 'Crear cuenta nueva')
             ],
           ),
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    if (_connection != null) {
-      MySQLService.closeConnection(_connection!);
-    }
-    super.dispose();
-  }
+  //@override
+  //void dispose() {
+  //  if (_connection != null) {
+  //    MySQLService.closeConnection(_connection!);
+  //  }
+  //  super.dispose();
+  //}
 }
