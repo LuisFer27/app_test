@@ -6,6 +6,7 @@ import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
 import 'package:app_test/src/widgets/TextField/textField.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 import 'package:app_test/src/widgets/LinkButton/linkButton.dart';
+import 'package:app_test/model/db_users.dart';
 //import 'package:mysql1/mysql1.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final dbUsers = DBUsers.instance;
 
   @override
   void initState() {
@@ -79,14 +81,18 @@ class _LoginPageState extends State<LoginPage> {
                   menuText: 'Iniciar sesión',
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      if (emailController.text == "admin@mail.com" &&
-                          passwordController.text == "123") {
+                      // Consultar la base de datos para verificar el usuario
+                      final user =
+                          await dbUsers.getUserByEmail(emailController.text);
+                      if (user != null &&
+                          user['contrasena'] == passwordController.text) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MyHomePage(
-                                    title: 'Aplicación de prueba',
-                                  )),
+                            builder: (context) => const MyHomePage(
+                              title: 'Aplicación de prueba',
+                            ),
+                          ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(

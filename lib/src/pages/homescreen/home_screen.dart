@@ -1,14 +1,15 @@
+import 'package:app_test/src/widgets/ListHamburguer/listHamburguer.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/src/pages/record/record.dart';
 import 'package:app_test/src/pages/profile/photo_screen.dart';
 import 'package:app_test/src/pages/video/video_record.dart';
 import 'package:app_test/src/pages/list/list.dart';
 import 'package:app_test/src/pages/geolocalization/geolocalization.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -20,73 +21,68 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            // Mostrar el menú hamburguesa al hacer clic en el icono
+            Scaffold.of(context).openEndDrawer();
+          },
+        ),
       ),
-      body: Center(
-        child: Container(
-          margin: const EdgeInsets.all(40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Btns(
-                  menuText: 'Grabar audio',
-                  onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const RecordPage(title: 'Grabar audio'),
-                          ),
-                        ),
-                      }),
-              Btns(
-                  menuText: 'Tomar foto',
-                  onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const PhotoScreen(title: 'Tomar foto'),
-                          ),
-                        ),
-                      }),
-              Btns(
-                  menuText: 'Tomar video',
-                  onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const VideoRecord(title: 'Tomar video'),
-                          ),
-                        ),
-                      }),
-              Btns(
-                  menuText: 'Ver lista',
-                  onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const ListPage(title: 'Ver lista'),
-                          ),
-                        ),
-                      }),
-              Btns(
-                  menuText: 'Ver ubicación',
-                  onTap: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const GeolocatorPage(title: 'Ver ubicación'),
-                          ),
-                        ),
-                      }),
-            ],
-          ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+              child: Text(
+                'Menú',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            HamburguerList(
+              text: 'Grabar audio',
+              onTap: () {
+                _navigateToPage(context, RecordPage(title: 'Grabar audio'));
+              },
+            ),
+            HamburguerList(
+              text: 'Tomar foto',
+              onTap: () {
+                _navigateToPage(context, PhotoScreen(title: 'Tomar foto'));
+              },
+            ),
+            HamburguerList(
+              text: 'Tomar video',
+              onTap: () {
+                _navigateToPage(context, VideoRecord(title: 'Tomar video'));
+              },
+            ),
+            HamburguerList(
+              text: 'Ver lista',
+              onTap: () {
+                _navigateToPage(context, ListPage(title: 'Ver lista'));
+              },
+            ),
+            HamburguerList(
+              text: 'Ver ubicación',
+              onTap: () {
+                _navigateToPage(
+                    context, GeolocatorPage(title: 'Ver ubicación'));
+              },
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  void _navigateToPage(BuildContext context, Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 }
