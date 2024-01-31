@@ -30,7 +30,6 @@ class DBUsers {
             primer_apellido TEXT,
             segundo_apellido TEXT,
             contrasena TEXT,
-            correo_electronico TEXT,
             nombre_usuario TEXT
           )
         ''');
