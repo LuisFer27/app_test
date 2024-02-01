@@ -106,7 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         'primer_apellido': lastNameController.text,
                         'segundo_apellido': secondLastNameController.text,
                         'contrasena': passwordController.text,
-                        //'correo_electronico': emailController.text,
                         'nombre_usuario': userNameController.text,
                       };
 

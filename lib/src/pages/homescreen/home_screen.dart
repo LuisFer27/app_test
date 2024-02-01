@@ -9,8 +9,10 @@ import 'package:app_test/src/pages/geolocalization/geolocalization.dart';
 import 'package:app_test/src/pages/profile/edit_profile.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage(
+      {super.key, required this.title, required this.userNameController});
   final String title;
+  final String userNameController;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -18,21 +20,32 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String? userNameController;
+  String? userEmail;
+  String? userFullName;
 
   @override
   void initState() {
     super.initState();
-    _loadUserName();
+    _loadUserData();
   }
 
-  Future<void> _loadUserName() async {
-    final db = DBUsers.instance;
-    final user = await db.getUserByEmail('email');
+  Future<void> _loadUserData() async {
+    final dbUsers = DBUsers.instance;
 
-    if (user != null) {
-      setState(() {
-        userNameController = user['nombre_usuario'];
-      });
+    // Utiliza el nombre de usuario pasado desde la pantalla de inicio de sesión
+    final username = widget.userNameController;
+
+    if (username != null) {
+      final user = await dbUsers.getUserByUsername(username);
+
+      if (user != null) {
+        setState(() {
+          userNameController = user['nombre_usuario'];
+          userEmail = user['email'];
+          userFullName =
+              '${user['nombre']} ${user['primer_apellido']} ${user['segundo_apellido']}';
+        });
+      }
     }
   }
 
@@ -73,7 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
               text: 'Editar perfil',
               onTap: () {
                 _navigateToPage(
-                    context, EditProfilePage(title: 'Editar perfil'));
+                    context,
+                    EditProfilePage(
+                        title: 'Editar perfil',
+                        userName: userNameController ?? ""));
               },
             ),
             HamburguerList(

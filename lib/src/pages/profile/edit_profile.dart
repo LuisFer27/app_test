@@ -1,11 +1,16 @@
+import 'package:app_test/model/db_users.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
 import 'package:app_test/src/widgets/TextField/textField.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key, required this.title});
+  const EditProfilePage({Key? key, required this.title, required this.userName})
+      : super(key: key);
+
   final String title;
+  final String userName;
+
   @override
   State<EditProfilePage> createState() => _EditProfileState();
 }
@@ -18,6 +23,32 @@ class _EditProfileState extends State<EditProfilePage> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Inicializa el controlador de nombre de usuario con el valor pasado
+    userNameController.text = widget.userName;
+
+    // Carga los datos del usuario al iniciar la página
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    final dbUsers = DBUsers.instance;
+    final user = await dbUsers.getUserByUsername(userNameController.text);
+
+    if (user != null) {
+      setState(() {
+        nameController.text = user['nombre'] ?? '';
+        lastNameController.text = user['primer_apellido'] ?? '';
+        secondLastNameController.text = user['segundo_apellido'] ?? '';
+        emailController.text = user['email'] ?? '';
+        passwordController.text = user['contrasena'] ?? '';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

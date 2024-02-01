@@ -77,6 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   return null;
                 },
               ),
+
               Btns(
                   menuText: 'Iniciar sesión',
                   onTap: () async {
@@ -89,8 +90,9 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MyHomePage(
+                            builder: (context) => MyHomePage(
                               title: 'Aplicación de prueba',
+                              userNameController: user['nombre_usuario'],
                             ),
                           ),
                         );
@@ -106,6 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     }
                   }),
+              // ...
+
               LinkButton(
                   onTap: () {
                     Navigator.push(
