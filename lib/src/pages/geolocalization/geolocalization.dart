@@ -38,10 +38,6 @@ class _GeolocatorPageState extends State<GeolocatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: myPosition == null
           ? const CircularProgressIndicator()
           : FlutterMap(

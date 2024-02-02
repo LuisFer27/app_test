@@ -72,4 +72,25 @@ class DBUsers {
       return null;
     }
   }
+
+  Future<int> updateUser(
+      int? id,
+      String nombre,
+      String primerApellido,
+      String segundoApellido,
+      String nombre_usuario,
+      String email,
+      String contrasena) async {
+    final db = await instance.database;
+    final data = {
+      'nombre': nombre,
+      'primer_apellido': primerApellido,
+      'segundo_apellido': segundoApellido,
+      'nombre_usuario': nombre_usuario,
+      'email': email,
+      'contrasena': contrasena,
+    };
+
+    return await db.update('users', data, where: 'id = ?', whereArgs: [id]);
+  }
 }

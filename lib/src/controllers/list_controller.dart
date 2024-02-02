@@ -1,17 +1,14 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_helper.dart';
 import 'package:path/path.dart';
 
 class ListController {
   List<Map<String, dynamic>> _allData = [];
-  bool _isLoading = true;
 
   Future<void> _refreshData() async {
     final data = await SQLHelper.getAllData();
 
     _allData = data;
-    _isLoading = false;
   }
 
   Future<void> _addData() async {

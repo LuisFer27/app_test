@@ -1,5 +1,5 @@
-import 'package:app_test/model/db_users.dart';
 import 'package:flutter/material.dart';
+import 'package:app_test/model/db_users.dart';
 import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
 import 'package:app_test/src/widgets/TextField/textField.dart';
 import 'package:app_test/src/widgets/Buttons/btns.dart';
@@ -50,25 +50,45 @@ class _EditProfileState extends State<EditProfilePage> {
     }
   }
 
+  Future<void> updateUserData() async {
+    final dbUsers = DBUsers.instance;
+
+    // Obtén el ID del usuario para la actualización
+    final user = await dbUsers.getUserByUsername(userNameController.text);
+    final userId = user != null ? user['id'] : null;
+
+    // Actualiza los datos en la base de datos
+    await dbUsers.updateUser(
+      userId,
+      nameController.text,
+      lastNameController.text,
+      secondLastNameController.text,
+      userNameController.text,
+      emailController.text,
+      passwordController.text,
+    );
+
+    // Vuelve a cargar los datos actualizados
+    await loadUserData();
+
+    // Muestra el mensaje de éxito
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Se han modificado los datos con éxito'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Center(
-          child: Text(
-            'Registro de usuario',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextInput(
                   controller: nameController,
@@ -124,9 +144,15 @@ class _EditProfileState extends State<EditProfilePage> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 Btns(
                   menuText: 'Guardar',
-                  onTap: () async {},
+                  onTap: () async {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      // Validación exitosa, actualiza los datos del usuario
+                      await updateUserData();
+                    }
+                  },
                 ),
               ],
             ),

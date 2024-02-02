@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 
 class GeolocalizationController {
   Future<Position> determinePosition() async {

@@ -1,5 +1,4 @@
 //import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:io';
 import 'package:mysql1/mysql1.dart';
 
 class MySQLService {
