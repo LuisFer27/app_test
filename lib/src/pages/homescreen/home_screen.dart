@@ -1,3 +1,4 @@
+import 'package:app_test/src/pages/barcodeqr/barcode_qr.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/src/controllers/logout_controller.dart';
 import 'package:app_test/src/widgets/AppBar/appBar.dart';
@@ -73,101 +74,102 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildTabletLayout() {
     return Scaffold(
-      appBar: MyAppBar(
-        title: appBarTitle ?? '', // Usa una cadena vacía si appBarTitle es nulo
-        onLogout: () => LogoutController.logout(
-          context,
-          setState,
-          userNameController,
-          userEmail,
-          userFullName,
-          currentPage,
-        ),
-      ),
       body: Row(
         children: [
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                  ),
-                  child: Text(
-                    'Hola, ${userNameController ?? 'Usuario'}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
+            flex: 1,
+            child: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                    child: Text(
+                      'Hola, ${userNameController ?? 'Usuario'}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
-                ),
-                HamburguerList(
-                  text: 'Editar perfil',
-                  onTap: () {
-                    _updateCurrentPage(
-                      EditProfilePage(
-                        title: 'Editar perfil',
-                        userName: userNameController ?? "",
-                      ),
-                      'Editar perfil', // Nuevo: establece el nuevo título
-                    );
-                  },
-                  icon: Icons.edit,
-                ),
-                HamburguerList(
-                  text: 'Grabar audio',
-                  onTap: () {
-                    _updateCurrentPage(
-                        RecordPage(title: 'Grabar audio'), 'Grabar audio');
-                  },
-                  icon: Icons.mic,
-                ),
-                HamburguerList(
-                  text: 'Tomar foto',
-                  onTap: () {
-                    _updateCurrentPage(
-                        PhotoScreen(title: 'Tomar foto'), 'Tomar foto');
-                  },
-                  icon: Icons.camera,
-                ),
-                HamburguerList(
-                  text: 'Tomar video',
-                  onTap: () {
-                    _updateCurrentPage(
-                        VideoRecord(title: 'Tomar video'), 'Tomar video');
-                  },
-                  icon: Icons.video_camera_back,
-                ),
-                HamburguerList(
-                  text: 'Ver lista',
-                  onTap: () {
-                    _updateCurrentPage(
-                        ListPage(title: 'Ver lista'), 'Ver lista');
-                  },
-                  icon: Icons.list,
-                ),
-                HamburguerList(
-                  text: 'Ver ubicación',
-                  onTap: () {
-                    _updateCurrentPage(GeolocatorPage(title: 'Ver ubicación'),
-                        'Ver ubicación');
-                  },
-                  icon: Icons.location_on,
-                ),
-                HamburguerList(
-                  text: 'Cerrar sesión',
-                  onTap: () => LogoutController.logout(
-                    context,
-                    setState,
-                    userNameController,
-                    userEmail,
-                    userFullName,
-                    currentPage,
+                  HamburguerList(
+                    text: 'Editar perfil',
+                    onTap: () {
+                      _updateCurrentPage(
+                        EditProfilePage(
+                          title: 'Editar perfil',
+                          userName: userNameController ?? "",
+                        ),
+                        'Editar perfil', // Nuevo: establece el nuevo título
+                      );
+                    },
+                    icon: Icons.edit,
                   ),
-                  icon: Icons.logout,
-                ),
-              ],
+                  HamburguerList(
+                    text: 'Grabar audio',
+                    onTap: () {
+                      _updateCurrentPage(
+                          RecordPage(title: 'Grabar audio'), 'Grabar audio');
+                    },
+                    icon: Icons.mic,
+                  ),
+                  HamburguerList(
+                    text: 'Tomar foto',
+                    onTap: () {
+                      _updateCurrentPage(
+                          PhotoScreen(title: 'Tomar foto'), 'Tomar foto');
+                    },
+                    icon: Icons.camera,
+                  ),
+                  HamburguerList(
+                    text: 'Escanear QR y barcode',
+                    onTap: () {
+                      _updateCurrentPage(
+                          QrBarcodePage(title: 'Escanear QR y barcode'),
+                          'Escanear QR y barcode');
+                    },
+                    icon: Icons.qr_code,
+                  ),
+                  HamburguerList(
+                    text: 'Tomar video',
+                    onTap: () {
+                      _updateCurrentPage(
+                          VideoRecord(title: 'Tomar video'), 'Tomar video');
+                    },
+                    icon: Icons.video_camera_back,
+                  ),
+                  HamburguerList(
+                    text: 'Ver lista',
+                    onTap: () {
+                      _updateCurrentPage(
+                          ListPage(title: 'Ver lista'), 'Ver lista');
+                    },
+                    icon: Icons.list,
+                  ),
+                  HamburguerList(
+                    text: 'Ver ubicación',
+                    onTap: () {
+                      _updateCurrentPage(GeolocatorPage(title: 'Ver ubicación'),
+                          'Ver ubicación');
+                    },
+                    icon: Icons.location_on,
+                  ),
+                  HamburguerList(
+                    text: 'Cerrar sesión',
+                    onTap: () => LogoutController.logout(
+                      context,
+                      setState,
+                      userNameController,
+                      userEmail,
+                      userFullName,
+                      currentPage,
+                    ),
+                    icon: Icons.logout,
+                  ),
+                ],
+              ),
             ),
           ),
           VerticalDivider(
@@ -175,7 +177,26 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Expanded(
             flex: 3,
-            child: currentPage ?? DashPageState(),
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(appBarTitle ?? ''),
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () => LogoutController.logout(
+                      context,
+                      setState,
+                      userNameController,
+                      userEmail,
+                      userFullName,
+                      currentPage,
+                    ),
+                  ),
+                ],
+              ),
+              body: currentPage ?? DashPageState(),
+            ),
           ),
         ],
       ),
@@ -243,6 +264,16 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.pop(context);
               },
               icon: Icons.camera,
+            ),
+            HamburguerList(
+              text: 'Escanear QR y barcode',
+              onTap: () {
+                _updateCurrentPage(
+                    QrBarcodePage(title: 'Escanear QR y barcode'),
+                    'Escanear QR y barcode');
+                Navigator.pop(context);
+              },
+              icon: Icons.qr_code,
             ),
             HamburguerList(
               text: 'Tomar video',
