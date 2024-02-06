@@ -12,7 +12,7 @@ class QrBarcodePage extends StatefulWidget {
 }
 
 class _QrBarcodeState extends State<QrBarcodePage> {
-  String _scanBarcode = 'Unknown';
+  String _scanBarcode = 'Desconocido';
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _QrBarcodeState extends State<QrBarcodePage> {
                 //  menuText: 'Start barcode scan stream',
                 //  onTap: () => startBarcodeScanStream(),
                 //),
-                Text('Scan result : $_scanBarcode\n',
+                Text('Resultado: $_scanBarcode\n',
                     style: TextStyle(fontSize: 20))
               ]));
     }));

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:app_test/src/pages/login/login.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-//Future<void> main() async {
-//  runApp(MyApp());
-//}
 void main() {
   runApp(MyApp());
 }

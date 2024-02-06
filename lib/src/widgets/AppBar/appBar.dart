@@ -11,9 +11,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet = MediaQuery.of(context).size.width > 600;
+
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       title: Text(title),
+      automaticallyImplyLeading:
+          !isTablet, // No mostrar el botón de retroceso en modo tablet
       actions: [
         IconButton(
           icon: Icon(Icons.exit_to_app),

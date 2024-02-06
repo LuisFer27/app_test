@@ -1,38 +1,30 @@
 import 'package:flutter/material.dart';
 
 class HamburguerList extends StatelessWidget {
-  final VoidCallback onTap;
   final String text;
-  final IconData? icon; // Nuevo atributo para el icono
+  final VoidCallback onTap;
+  final IconData icon;
 
-  const HamburguerList({
-    required this.text,
-    required this.onTap,
-    this.icon, // Icono opcional
-  });
+  HamburguerList({required this.text, required this.onTap, required this.icon});
 
   @override
   Widget build(BuildContext context) {
+    // Obtén el ancho actual del Drawer
+    double menuWidth = MediaQuery.of(context).size.width * 0.2;
+
     return ListTile(
-      onTap: onTap,
-      title: Row(
-        children: [
-          if (icon != null) // Agrega el icono si está definido
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(
-                icon,
-                size: 24.0,
-              ),
-            ),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 18.0,
-            ),
-          ),
-        ],
+      title: menuWidth > 200 // Ajusta el umbral según tus necesidades
+          ? Text(
+              text,
+              style: TextStyle(fontSize: 16),
+            )
+          : null,
+      leading: Container(
+        alignment: Alignment.center,
+        width: 56.0, // Ancho del contenedor para centrar el icono
+        child: Icon(icon, size: 32),
       ),
+      onTap: onTap,
     );
   }
 }
