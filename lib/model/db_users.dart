@@ -88,7 +88,7 @@ class DBUsers {
       'segundo_apellido': segundoApellido,
       'nombre_usuario': nombre_usuario,
       'email': email,
-      'contrasena': contrasena,
+      'contrasena': contrasena, // Corregir el nombre del parámetro aquí
     };
 
     return await db.update('users', data, where: 'id = ?', whereArgs: [id]);

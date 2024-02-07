@@ -27,23 +27,21 @@ class _EditProfileState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
-
-    // Inicializa el controlador de nombre de usuario con el valor pasado
-    userNameController.text = widget.userName;
-
-    // Carga los datos del usuario al iniciar la página
+    // Cargar los datos del usuario al iniciar la página
     loadUserData();
   }
 
   Future<void> loadUserData() async {
     final dbUsers = DBUsers.instance;
-    final user = await dbUsers.getUserByUsername(userNameController.text);
+    final user = await dbUsers.getUserByUsername(widget.userName);
 
     if (user != null) {
       setState(() {
         nameController.text = user['nombre'] ?? '';
         lastNameController.text = user['primer_apellido'] ?? '';
         secondLastNameController.text = user['segundo_apellido'] ?? '';
+        userNameController.text =
+            user['nombre_usuario'] ?? ''; // Corregir el nombre del campo
         emailController.text = user['email'] ?? '';
         passwordController.text = user['contrasena'] ?? '';
       });
@@ -54,7 +52,7 @@ class _EditProfileState extends State<EditProfilePage> {
     final dbUsers = DBUsers.instance;
 
     // Obtén el ID del usuario para la actualización
-    final user = await dbUsers.getUserByUsername(userNameController.text);
+    final user = await dbUsers.getUserByUsername(widget.userName);
     final userId = user != null ? user['id'] : null;
 
     // Actualiza los datos en la base de datos
@@ -67,9 +65,6 @@ class _EditProfileState extends State<EditProfilePage> {
       emailController.text,
       passwordController.text,
     );
-
-    // Vuelve a cargar los datos actualizados
-    await loadUserData();
 
     // Muestra el mensaje de éxito
     ScaffoldMessenger.of(context).showSnackBar(

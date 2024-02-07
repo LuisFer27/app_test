@@ -50,35 +50,35 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextInput(
-                controller: emailController,
-                labelText: 'Correo electrónico',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor introduce un correo electrónico válido';
-                  }
-                  return null;
-                },
-              ),
-              PasswordInput(
-                controller: passwordController,
-                labelText: 'Contraseña',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor introduce tu contraseña';
-                  }
-                  return null;
-                },
-              ),
-
-              Btns(
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextInput(
+                  controller: emailController,
+                  labelText: 'Correo electrónico',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor introduce un correo electrónico válido';
+                    }
+                    return null;
+                  },
+                ),
+                PasswordInput(
+                  controller: passwordController,
+                  labelText: 'Contraseña',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor introduce tu contraseña';
+                    }
+                    return null;
+                  },
+                ),
+                Btns(
                   menuText: 'Iniciar sesión',
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
@@ -107,21 +107,23 @@ class _LoginPageState extends State<LoginPage> {
                             content: Text('Por favor llena los campos')),
                       );
                     }
-                  }),
-              // ...
-
-              LinkButton(
+                  },
+                ),
+                LinkButton(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const RegisterPage(
-                                title: 'Crear cuenta',
-                              )),
+                        builder: (context) => const RegisterPage(
+                          title: 'Crear cuenta',
+                        ),
+                      ),
                     );
                   },
-                  text: 'Crear cuenta nueva')
-            ],
+                  text: 'Crear cuenta nueva',
+                ),
+              ],
+            ),
           ),
         ),
       ),
