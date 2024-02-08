@@ -1,4 +1,5 @@
 import 'package:app_test/src/pages/barcodeqr/barcode_qr.dart';
+import 'package:app_test/src/pages/list/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/src/controllers/logout_controller.dart';
 import 'package:app_test/src/widgets/AppBar/appBar.dart';
@@ -149,10 +150,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icons.video_camera_back,
                     ),
                     HamburguerList(
-                      text: 'Ver lista',
+                      text: 'Lista de ejemplo',
+                      onTap: () {
+                        _updateCurrentPage(ListPage(title: 'Lista de ejemplo'),
+                            'Lista de ejemplo');
+                      },
+                      icon: Icons.list,
+                    ),
+                    HamburguerList(
+                      text: 'Lista de categorias',
                       onTap: () {
                         _updateCurrentPage(
-                            ListPage(title: 'Ver lista'), 'Ver lista');
+                            ListCategoriesPage(title: 'Lista de categorias'),
+                            'Lista de categorias');
                       },
                       icon: Icons.list,
                     ),
@@ -289,9 +299,20 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icons.video_camera_back,
             ),
             HamburguerList(
-              text: 'Ver lista',
+              text: 'Lista de ejemplo',
               onTap: () {
-                _updateCurrentPage(ListPage(title: 'Ver lista'), 'Ver lista');
+                _updateCurrentPage(
+                    ListPage(title: 'Lista de ejemplo'), 'Lista de ejemplo');
+                Navigator.pop(context);
+              },
+              icon: Icons.list,
+            ),
+            HamburguerList(
+              text: 'Lista de categorias',
+              onTap: () {
+                _updateCurrentPage(
+                    ListCategoriesPage(title: 'Lista de categorias'),
+                    'Lista de categorias');
                 Navigator.pop(context);
               },
               icon: Icons.list,
