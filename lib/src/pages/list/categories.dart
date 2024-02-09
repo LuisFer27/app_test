@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_categories.dart';
 import 'package:app_test/src/widgets/List/listData.dart';
+import 'package:app_test/src/widgets/TextField/textField.dart';
+import 'package:app_test/src/widgets/Buttons/btns.dart';
+//import 'package:app_test/core/templates/modal.dart';
 
 class ListCategoriesPage extends StatefulWidget {
   const ListCategoriesPage({super.key, required this.title});
@@ -45,16 +48,6 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
     _refreshData();
   }
 
-  void _deleteData(int id) async {
-    await DBCategories.deleteData(id);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.redAccent,
-        content: Text("Datos eliminados correctamente"),
-      ),
-    );
-  }
-
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
@@ -80,26 +73,21 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextField(
+            TextInput(
               controller: _titleController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Titulo",
-              ),
+              labelText: 'Titulo',
+              hintText: "Titulo",
             ),
             const SizedBox(height: 10),
-            TextField(
+            TextInput(
               controller: _descController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Descripción",
-              ),
+              labelText: 'Descripción',
+              hintText: "Descripción",
             ),
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
-                onPressed: () async {
+              child: Btns(
+                onTap: () async {
                   if (id == null) {
                     await _addData();
                   }
@@ -112,18 +100,9 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
                   Navigator.of(context).pop();
                   print("Datos agregados correctamente");
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Text(
-                    id == null ? "Agregar Datos" : "Actualizar Datos",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+                menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -138,7 +117,8 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
           : ListData(
               allData: _allData,
               showBottomSheet: showBottomSheet,
-              deleteData: _deleteData,
+              fieldsToShow: ['id', 'title', 'desc'],
+              showDeleteButton: false,
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBottomSheet(null),

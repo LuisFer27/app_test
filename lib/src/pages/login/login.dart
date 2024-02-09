@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app_test/src/pages/homescreen/home_screen.dart';
+import 'package:app_test/core/templates/template.dart';
 //import 'package:app_test/src/controllers/connection/data_base_controller.dart';
 import 'package:app_test/src/pages/login/register.dart';
 import 'package:app_test/src/widgets/PasswordField/passwordField.dart';

@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:app_test/src/widgets/Buttons/iconBtns.dart';
 
 class ListData extends StatelessWidget {
   final List<Map<String, dynamic>> allData;
   final Function(int) showBottomSheet;
-  final Function(int) deleteData;
+  final Function(int)? deleteData; // Hacer deleteData opcional
+  final List<String> fieldsToShow; // Nuevos campos a mostrar
+  final bool showEditButton;
+  final bool showDeleteButton;
 
   const ListData({
     required this.allData,
     required this.showBottomSheet,
-    required this.deleteData,
+    this.deleteData, // Hacer deleteData opcional
+    required this.fieldsToShow, // Se incluye como parámetro
+    this.showEditButton =
+        true, // Mostrar botón de editar de forma predeterminada
+    this.showDeleteButton =
+        true, // Mostrar botón de eliminar de forma predeterminada
   });
 
   @override
@@ -21,34 +30,35 @@ class ListData extends StatelessWidget {
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              allData[index]['title'],
+              allData[index][fieldsToShow[1]], // Primer campo
               style: const TextStyle(fontSize: 20),
             ),
           ),
           subtitle: Text(
-            allData[index]['desc'],
+            allData[index][fieldsToShow[2]], // Segundo campo
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                onPressed: () {
-                  showBottomSheet(allData[index]['id']);
-                },
-                icon: const Icon(
-                  Icons.edit,
+              if (showEditButton)
+                IconBtns(
+                  onTap: () {
+                    showBottomSheet(
+                        allData[index][fieldsToShow[0]]); // Tercer campo
+                  },
+                  icon: Icons.edit,
                   color: Colors.indigo,
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  deleteData(allData[index]['id']);
-                },
-                icon: const Icon(
-                  Icons.delete,
+              if (deleteData != null &&
+                  showDeleteButton) // Mostrar el botón solo si deleteData está definido y showDeleteButton es verdadero
+                IconBtns(
+                  onTap: () {
+                    deleteData!(
+                        allData[index][fieldsToShow[0]]); // Tercer campo
+                  },
+                  icon: Icons.delete,
                   color: Colors.redAccent,
                 ),
-              ),
             ],
           ),
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_helper.dart';
 import 'package:app_test/src/widgets/List/listData.dart';
+import 'package:app_test/src/widgets/TextField/textField.dart';
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key, required this.title});
@@ -73,26 +75,21 @@ class _ListPageState extends State<ListPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextField(
+            TextInput(
               controller: _titleController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Titulo",
-              ),
+              labelText: 'Titulo',
+              hintText: "Titulo",
             ),
             const SizedBox(height: 10),
-            TextField(
+            TextInput(
               controller: _descController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Descripción",
-              ),
+              labelText: 'Descripción',
+              hintText: "Descripción",
             ),
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
-                onPressed: () async {
+              child: Btns(
+                onTap: () async {
                   if (id == null) {
                     await _addData();
                   }
@@ -105,18 +102,9 @@ class _ListPageState extends State<ListPage> {
                   Navigator.of(context).pop();
                   print("Datos agregados correctamente");
                 },
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Text(
-                    id == null ? "Agregar Datos" : "Actualizar Datos",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
+                menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -131,6 +119,7 @@ class _ListPageState extends State<ListPage> {
               allData: _allData,
               showBottomSheet: showBottomSheet,
               deleteData: _deleteData,
+              fieldsToShow: ['id', 'title', 'desc'],
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBottomSheet(null),

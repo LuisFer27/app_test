@@ -4,11 +4,13 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
+  final String? hintText; // Hint opcional
 
   const TextInput({
     required this.controller,
     required this.labelText,
     this.validator,
+    this.hintText,
   });
 
   @override
@@ -18,9 +20,9 @@ class TextInput extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: labelText,
-        ),
+            border: OutlineInputBorder(),
+            labelText: labelText,
+            hintText: hintText),
         validator: validator,
       ),
     );

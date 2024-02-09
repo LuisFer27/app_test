@@ -133,6 +133,7 @@ class _ListProductsState extends State<ListProductsPage> {
               allData: _allData,
               showBottomSheet: showBottomSheet,
               deleteData: _deleteData,
+              fieldsToShow: ['id', 'title', 'desc'],
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBottomSheet(null),
