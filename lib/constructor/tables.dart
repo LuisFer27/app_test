@@ -6,6 +6,16 @@ class TableCreator {
     await createCategoriesTable(database);
   }
 
+  static Future<void> createProductTable(sql.Database database) async {
+    await database.execute("""CREATE TABLE IF NOT EXISTS products(
+      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+      id_category INTEGER,
+      code TEXT,
+      createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )
+    """);
+  }
+
   static Future<void> createDataTable(sql.Database database) async {
     await database.execute("""CREATE TABLE IF NOT EXISTS data(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

@@ -1,6 +1,12 @@
+import 'package:app_test/core/templates/modal.dart';
+import 'package:app_test/src/widgets/Buttons/iconBtns.dart';
+import 'package:app_test/src/widgets/LabelText/labelText.dart';
+import 'package:app_test/src/widgets/SelectButton/selectButton.dart';
 import 'package:flutter/material.dart';
 import 'package:app_test/model/db_products.dart';
 import 'package:app_test/src/widgets/List/listData.dart';
+import 'package:app_test/src/widgets/TextField/textField.dart';
+import 'package:app_test/src/widgets/Buttons/btns.dart';
 
 class ListProductsPage extends StatefulWidget {
   const ListProductsPage({super.key, required this.title});
@@ -63,63 +69,41 @@ class _ListProductsState extends State<ListProductsPage> {
       elevation: 5,
       isScrollControlled: true,
       context: context,
-      builder: (_) => Container(
-        padding: EdgeInsets.only(
-          top: 30,
-          left: 15,
-          right: 15,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 50,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Titulo",
-              ),
+      builder: (_) => DataBottomSheetTemplate(
+        fields: [
+          TextInput(
+            controller: _titleController,
+            labelText: 'Titulo',
+            hintText: "Titulo",
+          ),
+          const SizedBox(height: 10),
+          ReusableDropdown<String>(
+            items: ['Apple', 'Banana', 'Orange'],
+            selectedValue: 'Apple',
+            onChanged: (value) {
+              print('Selected fruit: $value');
+            },
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: Btns(
+              onTap: () async {
+                if (id == null) {
+                  await _addData();
+                }
+                if (id != null) {
+                  await _updateData(id);
+                }
+                _titleController.text = "";
+                _descController.text = "";
+                //hide bottom sheet
+                Navigator.of(context).pop();
+                print("Datos agregados correctamente");
+              },
+              menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
             ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _descController,
-              maxLines: 4,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Descripción",
-              ),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (id == null) {
-                    await _addData();
-                  }
-                  if (id != null) {
-                    await _updateData(id);
-                  }
-                  _titleController.text = "";
-                  _descController.text = "";
-                  //hide bottom sheet
-                  Navigator.of(context).pop();
-                  print("Datos agregados correctamente");
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(18),
-                  child: Text(
-                    id == null ? "Agregar Datos" : "Actualizar Datos",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -129,11 +113,45 @@ class _ListProductsState extends State<ListProductsPage> {
     return Scaffold(
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : ListData(
-              allData: _allData,
-              showBottomSheet: showBottomSheet,
-              deleteData: _deleteData,
-              fieldsToShow: ['id', 'title', 'desc'],
+          : ListView.builder(
+              itemCount: _allData.length,
+              itemBuilder: (context, index) {
+                final rowData = _allData[index];
+                return ListData(
+                  allData: [rowData],
+                  additionalWidgets: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: LabelText(
+                        rowData['title'],
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    LabelText(
+                      rowData['desc'],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconBtns(
+                          onTap: () {
+                            showBottomSheet(rowData['id']);
+                          },
+                          icon: Icons.edit,
+                          color: Colors.indigo,
+                        ),
+                        IconBtns(
+                          onTap: () {
+                            _deleteData(rowData['id']);
+                          },
+                          icon: Icons.delete,
+                          color: Colors.redAccent,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBottomSheet(null),
