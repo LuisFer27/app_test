@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:app_test/core/widgets.dart';
 import 'package:app_test/core/libraries.dart';
 import 'package:app_test/core/controllers.dart';
@@ -53,7 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
         if (constraints.maxWidth > 600) {
           return _buildTabletLayout();
         } else {
-          return _buildPhoneLayout();
+          return _buildPhoneLayout(
+              context); // Pasar el contexto al método _buildPhoneLayout
         }
       },
     );
@@ -90,13 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
               appBar: AppBar(
                 title: Text(appBarTitle ?? ''),
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    // Navegar a la página Dash al presionar el botón de atrás
-                    _updateCurrentPage(DashPageState(), 'Dash');
-                  },
-                ),
                 actions: [
                   IconButton(
                     icon: Icon(Icons.logout),
@@ -119,16 +114,18 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _buildPhoneLayout() {
+  Widget _buildPhoneLayout(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(appBarTitle ?? ''),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.menu),
           onPressed: () {
-            // Navegar a la página Dash al presionar el botón de atrás
-            _updateCurrentPage(DashPageState(), 'Dash');
+            _scaffoldKey.currentState!.openDrawer();
           },
         ),
         actions: [
