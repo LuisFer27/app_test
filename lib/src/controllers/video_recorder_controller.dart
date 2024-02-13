@@ -1,6 +1,4 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
-import 'package:video_player/video_player.dart';
+import 'package:app_test/core/libraries.dart';
 
 class VideoRecorderController {
   File? video;

@@ -1,5 +1,5 @@
 //import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mysql1/mysql1.dart';
+import 'package:app_test/core/libraries.dart';
 
 class MySQLService {
   static const String db = "test";

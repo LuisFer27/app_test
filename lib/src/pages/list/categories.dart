@@ -1,13 +1,7 @@
 import 'package:app_test/core/templates/modal.dart';
-import 'package:app_test/src/widgets/LabelText/labelText.dart';
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 import 'package:app_test/model/db_categories.dart';
-import 'package:app_test/src/widgets/List/listData.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
-
-import '../../widgets/Buttons/iconBtns.dart';
-//import 'package:app_test/core/templates/modal.dart';
+import 'package:app_test/core/widgets.dart';
 
 class ListCategoriesPage extends StatefulWidget {
   const ListCategoriesPage({super.key, required this.title});

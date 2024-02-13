@@ -1,11 +1,7 @@
 import 'package:app_test/core/templates/modal.dart';
-import 'package:flutter/material.dart';
-import 'package:app_test/model/db_helper.dart';
-import 'package:app_test/src/widgets/List/listData.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
-import 'package:app_test/src/widgets/Buttons/iconBtns.dart';
-import 'package:app_test/src/widgets/LabelText/labelText.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/model/db_test.dart';
+import 'package:app_test/core/widgets.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key, required this.title});
@@ -19,7 +15,7 @@ class _ListPageState extends State<ListPage> {
   bool _isLoading = true;
 
   void _refreshData() async {
-    final data = await SQLHelper.getAllData();
+    final data = await DBTest.getAllData();
     setState(() {
       _allData = data;
       _isLoading = false;
@@ -33,17 +29,17 @@ class _ListPageState extends State<ListPage> {
   }
 
   Future<void> _addData() async {
-    await SQLHelper.createData(_titleController.text, _descController.text);
+    await DBTest.createData(_titleController.text, _descController.text);
     _refreshData();
   }
 
   Future<void> _updateData(int id) async {
-    await SQLHelper.updateData(id, _titleController.text, _descController.text);
+    await DBTest.updateData(id, _titleController.text, _descController.text);
     _refreshData();
   }
 
   void _deleteData(int id) async {
-    await SQLHelper.deleteData(id);
+    await DBTest.deleteData(id);
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

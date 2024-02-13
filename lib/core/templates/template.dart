@@ -1,17 +1,8 @@
-import 'package:app_test/src/pages/barcodeqr/barcode_qr.dart';
-import 'package:app_test/src/pages/list/categories.dart';
-import 'package:flutter/material.dart';
-import 'package:app_test/src/controllers/logout_controller.dart';
-import 'package:app_test/src/widgets/AppBar/appBar.dart';
+import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/controllers.dart';
 import 'package:app_test/model/db_users.dart';
-import 'package:app_test/src/widgets/ListHamburguer/listHamburguer.dart';
-import 'package:app_test/src/pages/record/record.dart';
-import 'package:app_test/src/pages/imagepicker/photo_screen.dart';
-import 'package:app_test/src/pages/video/video_record.dart';
-import 'package:app_test/src/pages/list/list.dart';
-import 'package:app_test/src/pages/geolocalization/geolocalization.dart';
-import 'package:app_test/src/pages/profile/edit_profile.dart';
-import 'package:app_test/src/pages/dash/dash.dart';
+import 'package:app_test/core/pages.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -33,7 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String? userFullName;
   String? appBarTitle;
   Widget? currentPage;
-  double menuWidthPercentage = 0.2; // Porcentaje inicial del ancho del menú
+  double menuWidthPercentage = 0.2;
 
   @override
   void initState() {
@@ -42,12 +33,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loadUserData() async {
-    final dbUsers = DBUsers.instance;
-
+    final dbUsers = DBUsers();
     final username = widget.userNameController;
-
     final user = await dbUsers.getUserByUsername(username);
-
     if (user != null) {
       setState(() {
         userNameController = user['nombre_usuario'];
@@ -63,10 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
-          // Tablet layout
           return _buildTabletLayout();
         } else {
-          // Phone layout
           return _buildPhoneLayout();
         }
       },
@@ -90,104 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Drawer(
                 child: ListView(
                   padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    DrawerHeader(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                      child: Text(
-                        'Hola, ${userNameController ?? 'Usuario'}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                    ),
-                    HamburguerList(
-                      text: 'Editar perfil',
-                      onTap: () {
-                        _updateCurrentPage(
-                          EditProfilePage(
-                            title: 'Editar perfil',
-                            userName: userNameController ?? "",
-                          ),
-                          'Editar perfil',
-                        );
-                      },
-                      icon: Icons.edit,
-                    ),
-                    HamburguerList(
-                      text: 'Grabar audio',
-                      onTap: () {
-                        _updateCurrentPage(
-                            RecordPage(title: 'Grabar audio'), 'Grabar audio');
-                      },
-                      icon: Icons.mic,
-                    ),
-                    HamburguerList(
-                      text: 'Tomar foto',
-                      onTap: () {
-                        _updateCurrentPage(
-                            PhotoScreen(title: 'Tomar foto'), 'Tomar foto');
-                      },
-                      icon: Icons.camera,
-                    ),
-                    HamburguerList(
-                      text: 'Escanear QR y barcode',
-                      onTap: () {
-                        _updateCurrentPage(
-                            QrBarcodePage(title: 'Escanear QR y barcode'),
-                            'Escanear QR y barcode');
-                      },
-                      icon: Icons.qr_code,
-                    ),
-                    HamburguerList(
-                      text: 'Tomar video',
-                      onTap: () {
-                        _updateCurrentPage(
-                            VideoRecord(title: 'Tomar video'), 'Tomar video');
-                      },
-                      icon: Icons.video_camera_back,
-                    ),
-                    HamburguerList(
-                      text: 'Lista de ejemplo',
-                      onTap: () {
-                        _updateCurrentPage(ListPage(title: 'Lista de ejemplo'),
-                            'Lista de ejemplo');
-                      },
-                      icon: Icons.list,
-                    ),
-                    HamburguerList(
-                      text: 'Lista de categorias',
-                      onTap: () {
-                        _updateCurrentPage(
-                            ListCategoriesPage(title: 'Lista de categorias'),
-                            'Lista de categorias');
-                      },
-                      icon: Icons.list,
-                    ),
-                    HamburguerList(
-                      text: 'Ver ubicación',
-                      onTap: () {
-                        _updateCurrentPage(
-                            GeolocatorPage(title: 'Ver ubicación'),
-                            'Ver ubicación');
-                      },
-                      icon: Icons.location_on,
-                    ),
-                    HamburguerList(
-                      text: 'Cerrar sesión',
-                      onTap: () => LogoutController.logout(
-                        context,
-                        setState,
-                        userNameController,
-                        userEmail,
-                        userFullName,
-                        currentPage,
-                      ),
-                      icon: Icons.logout,
-                    ),
-                  ],
+                  children: _buildDrawerItems(),
                 ),
               ),
             ),
@@ -198,16 +87,29 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
             flex: 100 - (menuWidthPercentage * 100).toInt(),
             child: Scaffold(
-              appBar: MyAppBar(
-                title: appBarTitle ?? '',
-                onLogout: () => LogoutController.logout(
-                  context,
-                  setState,
-                  userNameController,
-                  userEmail,
-                  userFullName,
-                  currentPage,
+              appBar: AppBar(
+                title: Text(appBarTitle ?? ''),
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    // Navegar a la página Dash al presionar el botón de atrás
+                    _updateCurrentPage(DashPageState(), 'Dash');
+                  },
                 ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () => LogoutController.logout(
+                      context,
+                      setState,
+                      userNameController,
+                      userEmail,
+                      userFullName,
+                      currentPage,
+                    ),
+                  ),
+                ],
               ),
               body: currentPage ?? DashPageState(),
             ),
@@ -219,9 +121,132 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildPhoneLayout() {
     return Scaffold(
-      appBar: MyAppBar(
-        title: appBarTitle ?? '', // Usa una cadena vacía si appBarTitle es nulo
-        onLogout: () => LogoutController.logout(
+      appBar: AppBar(
+        title: Text(appBarTitle ?? ''),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navegar a la página Dash al presionar el botón de atrás
+            _updateCurrentPage(DashPageState(), 'Dash');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () => LogoutController.logout(
+              context,
+              setState,
+              userNameController,
+              userEmail,
+              userFullName,
+              currentPage,
+            ),
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: _buildDrawerItems(),
+        ),
+      ),
+      body: currentPage ?? DashPageState(),
+    );
+  }
+
+  List<Widget> _buildDrawerItems() {
+    return [
+      DrawerHeader(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+        child: Text(
+          'Hola, ${userNameController ?? 'Usuario'}',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
+        ),
+      ),
+      HamburguerList(
+        text: 'Editar perfil',
+        onTap: () => _updateCurrentPage(
+          EditProfilePage(
+            title: 'Editar perfil',
+            userName: userNameController ?? "",
+          ),
+          'Editar perfil',
+        ),
+        icon: Icons.edit,
+      ),
+      HamburguerList(
+        text: 'Grabar audio',
+        onTap: () => _updateCurrentPage(
+          RecordPage(title: 'Grabar audio'),
+          'Grabar audio',
+        ),
+        icon: Icons.mic,
+      ),
+      HamburguerList(
+        text: 'Tomar foto',
+        onTap: () => _updateCurrentPage(
+          PhotoScreen(title: 'Tomar foto'),
+          'Tomar foto',
+        ),
+        icon: Icons.camera,
+      ),
+      HamburguerList(
+        text: 'Escanear QR y barcode',
+        onTap: () => _updateCurrentPage(
+          QrBarcodePage(title: 'Escanear QR y barcode'),
+          'Escanear QR y barcode',
+        ),
+        icon: Icons.qr_code,
+      ),
+      HamburguerList(
+        text: 'Tomar video',
+        onTap: () => _updateCurrentPage(
+          VideoRecord(title: 'Tomar video'),
+          'Tomar video',
+        ),
+        icon: Icons.video_camera_back,
+      ),
+      HamburguerList(
+        text: 'Lista de ejemplo',
+        onTap: () => _updateCurrentPage(
+          ListPage(title: 'Lista de ejemplo'),
+          'Lista de ejemplo',
+        ),
+        icon: Icons.list,
+      ),
+      HamburguerList(
+        text: 'Lista de categorías',
+        onTap: () => _updateCurrentPage(
+          ListCategoriesPage(title: 'Lista de categorías'),
+          'Lista de categorías',
+        ),
+        icon: Icons.list,
+      ),
+      HamburguerList(
+        text: 'Lista de productos',
+        onTap: () => _updateCurrentPage(
+          ListProductsPage(title: 'Lista de productos'),
+          'Lista de productos',
+        ),
+        icon: Icons.shopping_bag,
+      ),
+      HamburguerList(
+        text: 'Ver ubicación',
+        onTap: () => _updateCurrentPage(
+          GeolocatorPage(title: 'Ver ubicación'),
+          'Ver ubicación',
+        ),
+        icon: Icons.location_on,
+      ),
+      HamburguerList(
+        text: 'Cerrar sesión',
+        onTap: () => LogoutController.logout(
           context,
           setState,
           userNameController,
@@ -229,126 +254,15 @@ class _MyHomePageState extends State<MyHomePage> {
           userFullName,
           currentPage,
         ),
+        icon: Icons.logout,
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
-              child: Text(
-                'Hola, ${userNameController ?? 'Usuario'}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            HamburguerList(
-              text: 'Editar perfil',
-              onTap: () {
-                _updateCurrentPage(
-                  EditProfilePage(
-                    title: 'Editar perfil',
-                    userName: userNameController ?? "",
-                  ),
-                  'Editar perfil', // Nuevo: establece el nuevo título
-                );
-                Navigator.pop(
-                    context); // Cierra el Drawer al seleccionar una opción
-              },
-              icon: Icons.edit,
-            ),
-            HamburguerList(
-              text: 'Grabar audio',
-              onTap: () {
-                _updateCurrentPage(
-                    RecordPage(title: 'Grabar audio'), 'Grabar audio');
-                Navigator.pop(context);
-              },
-              icon: Icons.mic,
-            ),
-            HamburguerList(
-              text: 'Tomar foto',
-              onTap: () {
-                _updateCurrentPage(
-                    PhotoScreen(title: 'Tomar foto'), 'Tomar foto');
-                Navigator.pop(context);
-              },
-              icon: Icons.camera,
-            ),
-            HamburguerList(
-              text: 'Escanear QR y barcode',
-              onTap: () {
-                _updateCurrentPage(
-                    QrBarcodePage(title: 'Escanear QR y barcode'),
-                    'Escanear QR y barcode');
-                Navigator.pop(context);
-              },
-              icon: Icons.qr_code,
-            ),
-            HamburguerList(
-              text: 'Tomar video',
-              onTap: () {
-                _updateCurrentPage(
-                    VideoRecord(title: 'Tomar video'), 'Tomar video');
-                Navigator.pop(context);
-              },
-              icon: Icons.video_camera_back,
-            ),
-            HamburguerList(
-              text: 'Lista de ejemplo',
-              onTap: () {
-                _updateCurrentPage(
-                    ListPage(title: 'Lista de ejemplo'), 'Lista de ejemplo');
-                Navigator.pop(context);
-              },
-              icon: Icons.list,
-            ),
-            HamburguerList(
-              text: 'Lista de categorias',
-              onTap: () {
-                _updateCurrentPage(
-                    ListCategoriesPage(title: 'Lista de categorias'),
-                    'Lista de categorias');
-                Navigator.pop(context);
-              },
-              icon: Icons.list,
-            ),
-            HamburguerList(
-              text: 'Ver ubicación',
-              onTap: () {
-                _updateCurrentPage(
-                    GeolocatorPage(title: 'Ver ubicación'), 'Ver ubicación');
-                Navigator.pop(context);
-              },
-              icon: Icons.location_on,
-            ),
-            HamburguerList(
-              text: 'Cerrar sesión',
-              onTap: () => LogoutController.logout(
-                context,
-                setState,
-                userNameController,
-                userEmail,
-                userFullName,
-                currentPage,
-              ),
-              icon: Icons.logout,
-            ),
-          ],
-        ),
-      ),
-      body: currentPage ?? DashPageState(),
-    );
+    ];
   }
 
   void _updateCurrentPage(Widget page, String newTitle) {
     setState(() {
       currentPage = page;
-      appBarTitle = newTitle; // Nuevo: actualiza el título del AppBar
+      appBarTitle = newTitle;
     });
   }
 }

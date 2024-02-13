@@ -1,6 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
-
-import 'package:record/record.dart';
+import 'package:app_test/core/libraries.dart';
 // clase AudioRecorderController va ligado al controlador
 
 class AudioRecorderController {

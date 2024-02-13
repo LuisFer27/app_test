@@ -1,25 +1,17 @@
+import 'package:app_test/constructor/tables.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
-class DBCategories {
+class DBProducts {
   static Future<void> createTables(sql.Database database) async {
-    await database.execute("""
-CREATE TABLE products(
-      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-      title INTEGER,
-      desc TEXT,
-      createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-""");
+    await TableCreator.createDataTables(database);
   }
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase("database_name.db", version: 1,
-        onCreate: (sql.Database database, int version) async {
-      await createTables(database);
-    });
+    return TableCreator.db();
   }
 
   static Future<int> createData(String title, String? desc) async {
-    final db = await DBCategories.db();
+    final db = await DBProducts.db();
     final data = {'title': title, 'desc': desc};
     final id = await db.insert('products', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
@@ -27,17 +19,17 @@ CREATE TABLE products(
   }
 
   static Future<List<Map<String, dynamic>>> getAllData() async {
-    final db = await DBCategories.db();
+    final db = await DBProducts.db();
     return db.query('products', orderBy: 'id');
   }
 
   static Future<List<Map<String, dynamic>>> getSingleData(int id) async {
-    final db = await DBCategories.db();
+    final db = await DBProducts.db();
     return db.query('products', where: "id=?", whereArgs: [id], limit: 1);
   }
 
   static Future<int> updateData(int id, String title, String? desc) async {
-    final db = await DBCategories.db();
+    final db = await DBProducts.db();
     final data = {
       'title': title,
       'desc': desc,
@@ -49,7 +41,7 @@ CREATE TABLE products(
   }
 
   static Future<void> deleteData(int id) async {
-    final db = await DBCategories.db();
+    final db = await DBProducts.db();
     try {
       await db.delete('products', where: "id=?", whereArgs: [id]);
     } catch (e) {}

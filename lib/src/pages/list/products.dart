@@ -1,12 +1,8 @@
 import 'package:app_test/core/templates/modal.dart';
-import 'package:app_test/src/widgets/Buttons/iconBtns.dart';
-import 'package:app_test/src/widgets/LabelText/labelText.dart';
-import 'package:app_test/src/widgets/SelectButton/selectButton.dart';
-import 'package:flutter/material.dart';
+import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/libraries.dart';
 import 'package:app_test/model/db_products.dart';
-import 'package:app_test/src/widgets/List/listData.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
+import 'package:app_test/core/controllers.dart';
 
 class ListProductsPage extends StatefulWidget {
   const ListProductsPage({super.key, required this.title});
@@ -18,9 +14,8 @@ class ListProductsPage extends StatefulWidget {
 class _ListProductsState extends State<ListProductsPage> {
   List<Map<String, dynamic>> _allData = [];
   bool _isLoading = true;
-
   void _refreshData() async {
-    final data = await DBCategories.getAllData();
+    final data = await DBProducts.getAllData();
     setState(() {
       _allData = data;
       _isLoading = false;
@@ -34,18 +29,18 @@ class _ListProductsState extends State<ListProductsPage> {
   }
 
   Future<void> _addData() async {
-    await DBCategories.createData(_titleController.text, _descController.text);
+    await DBProducts.createData(_titleController.text, _descController.text);
     _refreshData();
   }
 
   Future<void> _updateData(int id) async {
-    await DBCategories.updateData(
+    await DBProducts.updateData(
         id, _titleController.text, _descController.text);
     _refreshData();
   }
 
   void _deleteData(int id) async {
-    await DBCategories.deleteData(id);
+    await DBProducts.deleteData(id);
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -57,6 +52,7 @@ class _ListProductsState extends State<ListProductsPage> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final QrBarcodeController _barcodeScannerController = QrBarcodeController();
 
   void showBottomSheet(int? id) async {
     if (id != null) {
@@ -75,14 +71,38 @@ class _ListProductsState extends State<ListProductsPage> {
             controller: _titleController,
             labelText: 'Titulo',
             hintText: "Titulo",
+            readOnly: true,
           ),
-          const SizedBox(height: 10),
-          ReusableDropdown<String>(
-            items: ['Apple', 'Banana', 'Orange'],
-            selectedValue: 'Apple',
-            onChanged: (value) {
-              print('Selected fruit: $value');
+          //ReusableDropdown<String>(
+          //  items: ['Apple', 'Banana', 'Orange'],
+          //  selectedValue: 'Apple',
+          //  onChanged: (value) {
+          //    print('Selected fruit: $value');
+          //  },
+          //),
+          TextInput(
+            controller: _descController,
+            labelText: 'Descripción',
+            hintText: "Descripción",
+          ),
+          IconBtns(
+            onTap: () async {
+              String result = await _barcodeScannerController.scanQR();
+              setState(() {
+                _titleController.text = result;
+              });
             },
+            icon: Icons.qr_code,
+          ),
+          IconBtns(
+            onTap: () async {
+              String result =
+                  await _barcodeScannerController.scanBarcodeNormal();
+              setState(() {
+                _titleController.text = result;
+              });
+            },
+            icon: Icons.barcode_reader,
           ),
           const SizedBox(height: 20),
           Center(

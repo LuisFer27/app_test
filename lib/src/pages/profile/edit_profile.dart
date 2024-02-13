@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 import 'package:app_test/model/db_users.dart';
-import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
+import 'package:app_test/core/widgets.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key, required this.title, required this.userName})
@@ -32,7 +30,7 @@ class _EditProfileState extends State<EditProfilePage> {
   }
 
   Future<void> loadUserData() async {
-    final dbUsers = DBUsers.instance;
+    final dbUsers = DBUsers();
     final user = await dbUsers.getUserByUsername(widget.userName);
 
     if (user != null) {
@@ -49,7 +47,7 @@ class _EditProfileState extends State<EditProfilePage> {
   }
 
   Future<void> updateUserData() async {
-    final dbUsers = DBUsers.instance;
+    final dbUsers = DBUsers();
 
     // Obtén el ID del usuario para la actualización
     final user = await dbUsers.getUserByUsername(widget.userName);

@@ -1,50 +1,23 @@
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:app_test/constructor/tables.dart';
+import 'package:sqflite/sqflite.dart' as sql;
 
 class DBUsers {
-  static Database? _database;
-  static final DBUsers instance = DBUsers._privateConstructor();
-
-  DBUsers._privateConstructor();
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-
-    // Si la base de datos no existe, créala
-    _database = await initDatabase();
-    return _database!;
+  static Future<void> createTables(sql.Database database) async {
+    await TableCreator.createDataTables(database);
   }
 
-  Future<Database> initDatabase() async {
-    final path = join(await getDatabasesPath(), 'your_database.db');
-
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            email TEXT,
-            nombre TEXT,
-            primer_apellido TEXT,
-            segundo_apellido TEXT,
-            contrasena TEXT,
-            nombre_usuario TEXT
-          )
-        ''');
-      },
-    );
+  static Future<sql.Database> db() async {
+    return TableCreator.db();
   }
 
   // Método para insertar un usuario en la base de datos
   Future<void> insertUser(Map<String, dynamic> user) async {
-    final db = await database;
+    final db = await DBUsers.db();
     await db.insert('users', user);
   }
 
   Future<Map<String, dynamic>?> getUserByEmail(String email) async {
-    final db = await database;
+    final db = await DBUsers.db();
     final result = await db.query(
       'users',
       where: 'email = ?',
@@ -59,7 +32,7 @@ class DBUsers {
   }
 
   Future<Map<String, dynamic>?> getUserByUsername(String username) async {
-    final db = await database;
+    final db = await DBUsers.db();
     final result = await db.query(
       'users',
       where: 'nombre_usuario = ?',
@@ -81,7 +54,7 @@ class DBUsers {
       String nombre_usuario,
       String email,
       String contrasena) async {
-    final db = await instance.database;
+    final db = await DBUsers.db();
     final data = {
       'nombre': nombre,
       'primer_apellido': primerApellido,

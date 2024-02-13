@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
-import 'package:app_test/src/controllers/video_recorder_controller.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/controllers.dart';
 
 class VideoRecord extends StatefulWidget {
   const VideoRecord({super.key, required this.title});

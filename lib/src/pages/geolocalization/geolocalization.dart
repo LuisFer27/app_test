@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:app_test/src/controllers/geolocalization_controller.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/controllers.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =

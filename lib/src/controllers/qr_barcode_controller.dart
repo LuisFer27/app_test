@@ -1,6 +1,5 @@
-import 'dart:async';
+import 'package:app_test/core/libraries.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class QrBarcodeController {
   Future<String> scanQR() async {

@@ -1,6 +1,6 @@
-import 'package:app_test/src/widgets/Buttons/btns.dart';
-import 'package:flutter/material.dart';
-import 'package:app_test/src/controllers/qr_barcode_controller.dart';
+import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/controllers.dart';
 
 class QrBarcodePage extends StatefulWidget {
   const QrBarcodePage({super.key, required this.title});

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 
 class LabelText extends StatelessWidget {
   final String text;

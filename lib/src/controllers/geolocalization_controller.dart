@@ -1,4 +1,4 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:app_test/core/libraries.dart';
 
 class GeolocalizationController {
   Future<Position> determinePosition() async {

@@ -1,6 +1,5 @@
-import 'package:app_test/src/pages/dash/dash.dart';
-import 'package:flutter/material.dart';
-import 'package:app_test/src/pages/login/login.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/pages.dart';
 
 class LogoutController {
   static void logout(

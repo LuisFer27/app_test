@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:app_test/src/controllers/photo_screen_controller.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/controllers.dart';
+import 'package:app_test/core/widgets.dart';
 
 class PhotoScreen extends StatefulWidget {
   const PhotoScreen({super.key, required this.title});

@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 import 'package:app_test/core/templates/template.dart';
 //import 'package:app_test/src/controllers/connection/data_base_controller.dart';
-import 'package:app_test/src/pages/login/register.dart';
-import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
-import 'package:app_test/src/widgets/LinkButton/linkButton.dart';
+import 'package:app_test/core/pages.dart';
+import 'package:app_test/core/widgets.dart';
 import 'package:app_test/model/db_users.dart';
+
 //import 'package:mysql1/mysql1.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final dbUsers = DBUsers.instance;
+  final dbUsers = DBUsers();
 
   @override
   void initState() {

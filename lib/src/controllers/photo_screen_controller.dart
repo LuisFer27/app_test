@@ -1,5 +1,4 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:app_test/core/libraries.dart';
 
 class PhotoScreenController {
   File? image;

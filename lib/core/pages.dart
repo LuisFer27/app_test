@@ -1,0 +1,12 @@
+export 'package:app_test/src/pages/record/record.dart';
+export 'package:app_test/src/pages/imagepicker/photo_screen.dart';
+export 'package:app_test/src/pages/video/video_record.dart';
+export 'package:app_test/src/pages/list/list.dart';
+export 'package:app_test/src/pages/geolocalization/geolocalization.dart';
+export 'package:app_test/src/pages/profile/edit_profile.dart';
+export 'package:app_test/src/pages/dash/dash.dart';
+export 'package:app_test/src/pages/list/products.dart';
+export 'package:app_test/src/pages/barcodeqr/barcode_qr.dart';
+export 'package:app_test/src/pages/list/categories.dart';
+export 'package:app_test/src/pages/login/login.dart';
+export 'package:app_test/src/pages/login/register.dart';

@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:app_test/src/widgets/PasswordField/passwordField.dart';
-import 'package:app_test/src/widgets/TextField/textField.dart';
-import 'package:app_test/src/widgets/Buttons/btns.dart';
+import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/widgets.dart';
 import 'package:app_test/model/db_users.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -19,7 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final dbUsers = DBUsers.instance;
+  final dbUsers = DBUsers();
 
   @override
   Widget build(BuildContext context) {

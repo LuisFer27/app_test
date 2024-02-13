@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 
 class Btns extends StatelessWidget {
   const Btns({super.key, required this.menuText, required this.onTap});

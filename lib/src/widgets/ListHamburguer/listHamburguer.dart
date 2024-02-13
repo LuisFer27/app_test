@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:app_test/core/libraries.dart';
 
 class HamburguerList extends StatelessWidget {
   final String text;
@@ -17,20 +17,22 @@ class HamburguerList extends StatelessWidget {
             if (constraints.maxWidth < 200) {
               // Ajusta este valor según tus necesidades
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 16.0),
                 child: Icon(icon, size: 32),
               );
             } else {
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 16.0),
                 child: Row(
                   children: [
                     Icon(icon, size: 32),
-                    SizedBox(width: 16.0),
+                    const SizedBox(width: 16.0),
                     Expanded(
                       child: Text(
                         text,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
                   ],
