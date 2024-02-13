@@ -92,6 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
               appBar: AppBar(
                 title: Text(appBarTitle ?? ''),
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    // Navegar a la página Dash al presionar el botón de atrás
+                    _updateCurrentPage(DashPageState(), 'Dash');
+                  },
+                ),
                 actions: [
                   IconButton(
                     icon: Icon(Icons.logout),
