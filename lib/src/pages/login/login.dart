@@ -1,11 +1,5 @@
-import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/route.dart';
 import 'package:app_test/core/templates/template.dart';
-//import 'package:app_test/src/controllers/connection/data_base_controller.dart';
-import 'package:app_test/core/pages.dart';
-import 'package:app_test/core/widgets.dart';
-import 'package:app_test/model/db_users.dart';
-
-//import 'package:mysql1/mysql1.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,26 +9,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  //MySqlConnection? _connection;
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final dbUsers = DBUsers();
-
-  @override
-  void initState() {
-    super.initState();
-    //_connectToMySQL();
-  }
-
-  // Future<void> _connectToMySQL() async {
-  //   try {
-  //     _connection = await MySQLService.connectToMySQL();
-  //   } catch (e) {
-  //     // Manejar errores de conexión aquí
-  //     print('Error de conexión: $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,10 +36,10 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 TextInput(
                   controller: emailController,
-                  labelText: 'Correo electrónico',
+                  labelText: 'Correo electrónico o Nombre de usuario',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un correo electrónico válido';
+                      return 'Por favor introduce un correo electrónico o nombre de usuario válido';
                     }
                     return null;
                   },
@@ -80,9 +58,8 @@ class _LoginPageState extends State<LoginPage> {
                   menuText: 'Iniciar sesión',
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      // Consultar la base de datos para verificar el usuario
-                      final user =
-                          await dbUsers.getUserByEmail(emailController.text);
+                      final user = await dbUsers
+                          .getUserByEmailOrUsername(emailController.text);
                       if (user != null &&
                           user['contrasena'] == passwordController.text) {
                         Navigator.push(
@@ -127,11 +104,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  //@override
-  //void dispose() {
-  //  if (_connection != null) {
-  //    MySQLService.closeConnection(_connection!);
-  //  }
-  //  super.dispose();
-  //}
 }

@@ -1,5 +1,4 @@
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/core/pages.dart';
+import 'package:app_test/core/route.dart';
 
 void main() {
   runApp(MyApp());

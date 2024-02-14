@@ -46,6 +46,23 @@ class DBUsers {
     }
   }
 
+  Future<Map<String, dynamic>?> getUserByEmailOrUsername(
+      String emailOrUsername) async {
+    final db = await DBUsers.db();
+    final List<Map<String, dynamic>> users = await db.query(
+      'users',
+      where: 'email = ? OR nombre_usuario = ?',
+      whereArgs: [emailOrUsername, emailOrUsername],
+      limit: 1,
+    );
+
+    if (users.isNotEmpty) {
+      return users.first;
+    } else {
+      return null;
+    }
+  }
+
   Future<int> updateUser(
       int? id,
       String nombre,

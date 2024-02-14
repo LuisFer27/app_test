@@ -4,3 +4,6 @@ export 'package:app_test/src/controllers/photo_screen_controller.dart';
 export 'package:app_test/src/controllers/audio_recorder_controller.dart';
 export 'package:app_test/src/controllers/video_recorder_controller.dart';
 export 'package:app_test/src/controllers/logout_controller.dart';
+export 'package:app_test/src/controllers/list_controller.dart';
+export 'package:app_test/src/controllers/list_categories_controller.dart';
+export 'package:app_test/src/controllers/list_products_controller.dart';

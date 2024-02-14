@@ -1,6 +1,4 @@
-import 'package:app_test/core/widgets.dart';
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/core/controllers.dart';
+import 'package:app_test/core/route.dart';
 
 class QrBarcodePage extends StatefulWidget {
   const QrBarcodePage({super.key, required this.title});

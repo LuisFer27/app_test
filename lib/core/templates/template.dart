@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:app_test/core/widgets.dart';
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/core/controllers.dart';
-import 'package:app_test/model/db_users.dart';
-import 'package:app_test/core/pages.dart';
+import 'package:app_test/core/route.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -165,12 +160,24 @@ class _MyHomePageState extends State<MyHomePage> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.inversePrimary,
         ),
-        child: Text(
-          'Hola, ${userNameController ?? 'Usuario'}',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CircleAvatar(
+              radius: 30,
+              // Aquí puedes cargar la imagen de perfil desde alguna fuente, por ejemplo, una URL o un archivo local
+              backgroundImage: AssetImage('assets/images/PNG/user.png'),
+            ),
+            const SizedBox(
+                height: 8), // Espacio entre la imagen de perfil y el texto
+            Text(
+              '${userNameController ?? 'Usuario'}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+              ),
+            ),
+          ],
         ),
       ),
       HamburguerList(

@@ -1,8 +1,5 @@
 import 'package:app_test/core/templates/modal.dart';
-import 'package:app_test/core/widgets.dart';
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/model/db_products.dart';
-import 'package:app_test/core/controllers.dart';
+import 'package:app_test/core/route.dart';
 
 class ListProductsPage extends StatefulWidget {
   const ListProductsPage({super.key, required this.title});
@@ -14,6 +11,8 @@ class ListProductsPage extends StatefulWidget {
 class _ListProductsState extends State<ListProductsPage> {
   List<Map<String, dynamic>> _allData = [];
   bool _isLoading = true;
+  late ListProductsController _listProductsController;
+
   void _refreshData() async {
     final data = await DBProducts.getAllData();
     setState(() {
@@ -26,28 +25,7 @@ class _ListProductsState extends State<ListProductsPage> {
   void initState() {
     super.initState();
     _refreshData();
-  }
-
-  Future<void> _addData() async {
-    await DBProducts.createData(_titleController.text, _descController.text);
-    _refreshData();
-  }
-
-  Future<void> _updateData(int id) async {
-    await DBProducts.updateData(
-        id, _titleController.text, _descController.text);
-    _refreshData();
-  }
-
-  void _deleteData(int id) async {
-    await DBProducts.deleteData(id);
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.redAccent,
-        content: Text("Datos eliminados correctamente"),
-      ),
-    );
+    _listProductsController = ListProductsController(context, _refreshData);
   }
 
   final TextEditingController _titleController = TextEditingController();
@@ -109,14 +87,14 @@ class _ListProductsState extends State<ListProductsPage> {
             child: Btns(
               onTap: () async {
                 if (id == null) {
-                  await _addData();
-                }
-                if (id != null) {
-                  await _updateData(id);
+                  await _listProductsController.addData(
+                      _titleController.text, _descController.text);
+                } else {
+                  await _listProductsController.updateData(
+                      id, _titleController.text, _descController.text);
                 }
                 _titleController.text = "";
                 _descController.text = "";
-                //hide bottom sheet
                 Navigator.of(context).pop();
                 print("Datos agregados correctamente");
               },
@@ -162,7 +140,7 @@ class _ListProductsState extends State<ListProductsPage> {
                         ),
                         IconBtns(
                           onTap: () {
-                            _deleteData(rowData['id']);
+                            _listProductsController.deleteData(rowData['id']);
                           },
                           icon: Icons.delete,
                           color: Colors.redAccent,

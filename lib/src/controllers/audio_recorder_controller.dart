@@ -1,4 +1,5 @@
-import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/route.dart';
+
 // clase AudioRecorderController va ligado al controlador
 
 class AudioRecorderController {

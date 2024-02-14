@@ -1,6 +1,4 @@
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/model/db_users.dart';
-import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/route.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key, required this.title, required this.userName})
@@ -22,6 +20,8 @@ class _EditProfileState extends State<EditProfilePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  File? _image; // Variable para almacenar la imagen seleccionada
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +42,11 @@ class _EditProfileState extends State<EditProfilePage> {
             user['nombre_usuario'] ?? ''; // Corregir el nombre del campo
         emailController.text = user['email'] ?? '';
         passwordController.text = user['contrasena'] ?? '';
+        // Cargar la foto de perfil del usuario si está disponible
+        // Esto dependerá de cómo estés almacenando las imágenes en tu base de datos
+        // Aquí estamos suponiendo que tienes una ruta de la imagen almacenada en la base de datos
+        // Puedes cargar la imagen usando la biblioteca de imágenes de Flutter o cualquier otra forma que prefieras
+        // Por ahora, simplemente dejamos la lógica de cargar la imagen como una tarea pendiente
       });
     }
   }
@@ -72,6 +77,17 @@ class _EditProfileState extends State<EditProfilePage> {
     );
   }
 
+  // Método para seleccionar una nueva foto de perfil
+  Future<void> _selectNewProfileImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,10 +95,23 @@ class _EditProfileState extends State<EditProfilePage> {
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                GestureDetector(
+                  onTap: _selectNewProfileImage,
+                  child: CircleAvatar(
+                    radius: 50,
+                    // Mostrar la imagen de perfil actual o una imagen de placeholder si no hay ninguna
+                    backgroundImage: _image != null
+                        ? FileImage(
+                            _image!) // Si hay una nueva imagen seleccionada, mostrarla
+                        : AssetImage('assets/images/PNG/user.png')
+                            as ImageProvider, // De lo contrario, mostrar una imagen de placeholder
+                  ),
+                ),
+                SizedBox(height: 8),
                 TextInput(
                   controller: nameController,
                   labelText: 'Nombre',
@@ -138,14 +167,14 @@ class _EditProfileState extends State<EditProfilePage> {
                   },
                 ),
                 SizedBox(height: 16),
-                Btns(
-                  menuText: 'Guardar',
-                  onTap: () async {
+                ElevatedButton(
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
                       // Validación exitosa, actualiza los datos del usuario
                       await updateUserData();
                     }
                   },
+                  child: Text('Guardar'),
                 ),
               ],
             ),

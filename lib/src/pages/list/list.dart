@@ -1,7 +1,5 @@
+import 'package:app_test/core/route.dart';
 import 'package:app_test/core/templates/modal.dart';
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/model/db_test.dart';
-import 'package:app_test/core/widgets.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key, required this.title});
@@ -13,6 +11,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> _allData = [];
   bool _isLoading = true;
+  late ListController _listController;
 
   void _refreshData() async {
     final data = await DBTest.getAllData();
@@ -26,27 +25,7 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     super.initState();
     _refreshData();
-  }
-
-  Future<void> _addData() async {
-    await DBTest.createData(_titleController.text, _descController.text);
-    _refreshData();
-  }
-
-  Future<void> _updateData(int id) async {
-    await DBTest.updateData(id, _titleController.text, _descController.text);
-    _refreshData();
-  }
-
-  void _deleteData(int id) async {
-    await DBTest.deleteData(id);
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.redAccent,
-        content: Text("Datos eliminados correctamente"),
-      ),
-    );
+    _listController = ListController(context, _refreshData);
   }
 
   final TextEditingController _titleController = TextEditingController();
@@ -81,14 +60,14 @@ class _ListPageState extends State<ListPage> {
             child: Btns(
               onTap: () async {
                 if (id == null) {
-                  await _addData();
-                }
-                if (id != null) {
-                  await _updateData(id);
+                  await _listController.addData(
+                      _titleController.text, _descController.text);
+                } else {
+                  await _listController.updateData(
+                      id, _titleController.text, _descController.text);
                 }
                 _titleController.text = "";
                 _descController.text = "";
-                //hide bottom sheet
                 Navigator.of(context).pop();
                 print("Datos agregados correctamente");
               },
@@ -133,7 +112,7 @@ class _ListPageState extends State<ListPage> {
                         ),
                         IconBtns(
                           onTap: () {
-                            _deleteData(rowData['id']);
+                            _listController.deleteData(rowData['id']);
                           },
                           icon: Icons.delete,
                           color: Colors.redAccent,

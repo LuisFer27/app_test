@@ -1,4 +1,4 @@
-import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/route.dart';
 
 class LabelText extends StatelessWidget {
   final String text;

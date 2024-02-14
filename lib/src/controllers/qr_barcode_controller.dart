@@ -1,4 +1,4 @@
-import 'package:app_test/core/libraries.dart';
+import 'package:app_test/core/route.dart';
 import 'package:flutter/services.dart';
 
 class QrBarcodeController {

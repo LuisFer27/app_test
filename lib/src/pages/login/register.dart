@@ -1,6 +1,4 @@
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/core/widgets.dart';
-import 'package:app_test/model/db_users.dart';
+import 'package:app_test/core/route.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key, required this.title});

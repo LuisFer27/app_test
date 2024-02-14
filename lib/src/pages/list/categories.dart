@@ -1,7 +1,5 @@
 import 'package:app_test/core/templates/modal.dart';
-import 'package:app_test/core/libraries.dart';
-import 'package:app_test/model/db_categories.dart';
-import 'package:app_test/core/widgets.dart';
+import 'package:app_test/core/route.dart';
 
 class ListCategoriesPage extends StatefulWidget {
   const ListCategoriesPage({super.key, required this.title});
@@ -13,18 +11,13 @@ class ListCategoriesPage extends StatefulWidget {
 class _ListCategoriesState extends State<ListCategoriesPage> {
   List<Map<String, dynamic>> _allData = [];
   bool _isLoading = true;
+  late ListCategoriesController _listCategoriesController;
 
   @override
   void initState() {
     super.initState();
-    _createTablesAndRefreshData();
-  }
-
-  Future<void> _createTablesAndRefreshData() async {
-    final db = await DBCategories.db();
-    await DBCategories.createTables(
-        db); // Asegúrate de llamar a createTables con la base de datos
-    await _refreshData();
+    _refreshData();
+    _listCategoriesController = ListCategoriesController(context, _refreshData);
   }
 
   Future<void> _refreshData() async {
@@ -33,17 +26,6 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
       _allData = categories;
       _isLoading = false;
     });
-  }
-
-  Future<void> _addData() async {
-    await DBCategories.createData(_titleController.text, _descController.text);
-    _refreshData();
-  }
-
-  Future<void> _updateData(int id) async {
-    await DBCategories.updateData(
-        id, _titleController.text, _descController.text);
-    _refreshData();
   }
 
   final TextEditingController _titleController = TextEditingController();
@@ -78,14 +60,14 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
                   child: Btns(
                     onTap: () async {
                       if (id == null) {
-                        await _addData();
-                      }
-                      if (id != null) {
-                        await _updateData(id);
+                        await _listCategoriesController.addData(
+                            _titleController.text, _descController.text);
+                      } else {
+                        await _listCategoriesController.updateData(
+                            id, _titleController.text, _descController.text);
                       }
                       _titleController.text = "";
                       _descController.text = "";
-                      //hide bottom sheet
                       Navigator.of(context).pop();
                       print("Datos agregados correctamente");
                     },
