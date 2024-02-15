@@ -17,6 +17,7 @@ class TableCreator {
             segundo_apellido TEXT,
             contrasena TEXT,
             nombre_usuario TEXT,
+            image TEXT,
             createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
           )
     """);

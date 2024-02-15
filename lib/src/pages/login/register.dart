@@ -16,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final dbUsers = DBUsers();
-
+  final Validations validations = Validations(); // Instancia de Validations
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,54 +41,44 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: nameController,
                   labelText: 'Nombre',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce tu nombre';
-                    }
-                    return null;
+                    return validations.validateField(value ?? '',
+                        50); // Convertir value a String y proporcionar una cadena vacía si es nulo
                   },
                 ),
                 TextInput(
                   controller: lastNameController,
                   labelText: 'Primer apellido',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce tu apellido';
-                    }
-                    return null;
+                    return validations.validateField(value ?? '',
+                        20); // Convertir value a String y proporcionar una cadena vacía si es nulo
                   },
                 ),
                 TextInput(
-                  controller: secondLastNameController,
-                  labelText: 'Segundo apellido',
-                ),
+                    controller: secondLastNameController,
+                    labelText: 'Segundo apellido',
+                    validator: (value) {
+                      validations.validateFieldNoRequired(value, 50);
+                      return null;
+                    }),
                 TextInput(
                   controller: userNameController,
                   labelText: 'Nombre de usuario',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un nombre de usuario';
-                    }
-                    return null;
+                    return validations.validateUsername(value ?? '');
                   },
                 ),
                 TextInput(
                   controller: emailController,
                   labelText: 'Correo electrónico',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un correo electrónico';
-                    }
-                    return null;
+                    return validations.validateEmail(value ?? '');
                   },
                 ),
                 PasswordInput(
                   controller: passwordController,
                   labelText: 'Contraseña',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce una contraseña';
-                    }
-                    return null;
+                    return validations.validatePassword(value ?? '');
                   },
                 ),
                 Btns(

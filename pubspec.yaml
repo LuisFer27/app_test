@@ -38,7 +38,7 @@ dependencies:
   record: ^4.4.4
   audioplayers: ^5.1.0
   camera:
-  path_provider: 
+  path_provider: ^2.1.2 
   path:
   image_picker:
   sqflite: ^2.3.0

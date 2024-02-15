@@ -1,11 +1,11 @@
 import 'package:app_test/core/route.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key, required this.title, required this.userName})
+  const EditProfilePage({Key? key, required this.title, required this.userId})
       : super(key: key);
 
   final String title;
-  final String userName;
+  final int userId;
 
   @override
   State<EditProfilePage> createState() => _EditProfileState();
@@ -19,8 +19,9 @@ class _EditProfileState extends State<EditProfilePage> {
   TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   File? _image; // Variable para almacenar la imagen seleccionada
+  String? _imagePath; // Ruta de la imagen seleccionada
+  final Validations validations = Validations(); // Instancia de Validations
 
   @override
   void initState() {
@@ -31,22 +32,21 @@ class _EditProfileState extends State<EditProfilePage> {
 
   Future<void> loadUserData() async {
     final dbUsers = DBUsers();
-    final user = await dbUsers.getUserByUsername(widget.userName);
+    final user = await dbUsers.getUserById(widget.userId);
 
     if (user != null) {
       setState(() {
         nameController.text = user['nombre'] ?? '';
         lastNameController.text = user['primer_apellido'] ?? '';
         secondLastNameController.text = user['segundo_apellido'] ?? '';
-        userNameController.text =
-            user['nombre_usuario'] ?? ''; // Corregir el nombre del campo
+        userNameController.text = user['nombre_usuario'] ?? '';
         emailController.text = user['email'] ?? '';
         passwordController.text = user['contrasena'] ?? '';
         // Cargar la foto de perfil del usuario si está disponible
-        // Esto dependerá de cómo estés almacenando las imágenes en tu base de datos
-        // Aquí estamos suponiendo que tienes una ruta de la imagen almacenada en la base de datos
-        // Puedes cargar la imagen usando la biblioteca de imágenes de Flutter o cualquier otra forma que prefieras
-        // Por ahora, simplemente dejamos la lógica de cargar la imagen como una tarea pendiente
+        _imagePath = user['image'] ?? '';
+        if (_imagePath != null && _imagePath!.isNotEmpty) {
+          _image = File(_imagePath!);
+        }
       });
     }
   }
@@ -55,7 +55,7 @@ class _EditProfileState extends State<EditProfilePage> {
     final dbUsers = DBUsers();
 
     // Obtén el ID del usuario para la actualización
-    final user = await dbUsers.getUserByUsername(widget.userName);
+    final user = await dbUsers.getUserById(widget.userId);
     final userId = user != null ? user['id'] : null;
 
     // Actualiza los datos en la base de datos
@@ -67,6 +67,7 @@ class _EditProfileState extends State<EditProfilePage> {
       userNameController.text,
       emailController.text,
       passwordController.text,
+      _imagePath, // Pasa la ruta de la imagen
     );
 
     // Muestra el mensaje de éxito
@@ -82,9 +83,24 @@ class _EditProfileState extends State<EditProfilePage> {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
+      final imageFile = File(pickedFile.path);
+      final directory = await getApplicationDocumentsDirectory();
+      final fileName =
+          pickedFile.path.split('/').last; // Obtener el nombre del archivo
+      final imagePath =
+          '${directory.path}/$fileName'; // Utilizar el nombre original
+
+      // Guarda la imagen en el directorio permanente
+      await imageFile.copy(imagePath);
+      print('Imagen guardada en: $imagePath');
+
       setState(() {
-        _image = File(pickedFile.path);
+        _image = imageFile;
+        _imagePath = imagePath;
       });
+
+      // Actualiza la ruta de la imagen en la base de datos
+      await updateUserData();
     }
   }
 
@@ -103,12 +119,22 @@ class _EditProfileState extends State<EditProfilePage> {
                   onTap: _selectNewProfileImage,
                   child: CircleAvatar(
                     radius: 50,
-                    // Mostrar la imagen de perfil actual o una imagen de placeholder si no hay ninguna
-                    backgroundImage: _image != null
-                        ? FileImage(
-                            _image!) // Si hay una nueva imagen seleccionada, mostrarla
-                        : AssetImage('assets/images/PNG/user.png')
-                            as ImageProvider, // De lo contrario, mostrar una imagen de placeholder
+                    backgroundColor: Colors.grey[200],
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: _image != null
+                            ? Image.file(
+                                _image!,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/images/PNG/user.png',
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 8),
@@ -116,61 +142,50 @@ class _EditProfileState extends State<EditProfilePage> {
                   controller: nameController,
                   labelText: 'Nombre',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce tu nombre';
-                    }
-                    return null;
+                    return validations.validateField(value ?? '', 50);
                   },
                 ),
                 TextInput(
                   controller: lastNameController,
                   labelText: 'Primer apellido',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce tu apellido';
-                    }
-                    return null;
+                    return validations.validateField(value ?? '', 20);
                   },
                 ),
                 TextInput(
                   controller: secondLastNameController,
                   labelText: 'Segundo apellido',
+                  validator: (value) {
+                    validations.validateFieldNoRequired(value ?? '', 20);
+                    return null;
+                  },
                 ),
                 TextInput(
                   controller: userNameController,
                   labelText: 'Nombre de usuario',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un nombre de usuario';
-                    }
-                    return null;
+                    return validations.validateUsername(value ?? '');
                   },
                 ),
                 TextInput(
                   controller: emailController,
                   labelText: 'Correo electrónico',
+                  readOnly: true,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce un correo electrónico';
-                    }
-                    return null;
+                    return validations.validateEmail(value ?? '');
                   },
                 ),
                 PasswordInput(
                   controller: passwordController,
                   labelText: 'Contraseña',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor introduce una contraseña';
-                    }
-                    return null;
+                    return validations.validatePassword(value ?? '');
                   },
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      // Validación exitosa, actualiza los datos del usuario
                       await updateUserData();
                     }
                   },

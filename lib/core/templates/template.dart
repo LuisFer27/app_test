@@ -4,23 +4,25 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({
     Key? key,
     required this.title,
-    required this.userNameController,
+    required this.userId, // Cambiado de userNameController a userId
   }) : super(key: key);
 
   final String title;
-  final String userNameController;
+  final int userId; // Cambiado de String a int?
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String? userNameController;
+  int? userId;
   String? userEmail;
+  String? userName;
   String? userFullName;
   String? appBarTitle;
   Widget? currentPage;
   double menuWidthPercentage = 0.2;
+  File? _image; // Agrega una variable de estado para la imagen seleccionada
 
   @override
   void initState() {
@@ -30,17 +32,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _loadUserData() async {
     final dbUsers = DBUsers();
-    final username = widget.userNameController;
-    final user = await dbUsers.getUserByUsername(username);
+    final userId = widget.userId;
+    final user = await dbUsers.getUserById(userId);
     if (user != null) {
       setState(() {
-        userNameController = user['nombre_usuario'];
+        this.userId = userId;
+        userName = user['nombre_usuario']; // Aquí cargamos el nombre de usuario
         userEmail = user['email'];
         userFullName =
             '${user['nombre']} ${user['primer_apellido']} ${user['segundo_apellido']}';
+        // Cargar la imagen del usuario
+        //_loadUserProfileImage(user['id']); // Asume que 'id' es el ID del usuario
       });
     }
   }
+
+  //Future<void> _loadUserProfileImage(int userId) async {
+  //  final userDirectory = await getApplicationDocumentsDirectory();
+  //  final userAssetsDir = '${userDirectory.path}/user_$userId';
+  //  final imageFileName =
+  //      'profile_image.jpg'; // Nombre de archivo para la imagen de perfil
+  //  final imageFile = File('$userAssetsDir/$imageFileName');
+  //  if (imageFile.existsSync()) {
+  //    setState(() {
+  //      _image = imageFile;
+  //    });
+  //  }
+  //}
 
   @override
   Widget build(BuildContext context) {
@@ -100,9 +118,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () => LogoutController.logout(
                       context,
                       setState,
-                      userNameController,
+                      userId, // Cambiado de userId a String
                       userEmail,
                       userFullName,
+                      userName,
                       currentPage,
                     ),
                   ),
@@ -136,9 +155,10 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () => LogoutController.logout(
               context,
               setState,
-              userNameController,
+              userId, // Cambiado de userId a String
               userEmail,
               userFullName,
+              userName,
               currentPage,
             ),
           ),
@@ -163,15 +183,18 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 30,
-              // Aquí puedes cargar la imagen de perfil desde alguna fuente, por ejemplo, una URL o un archivo local
-              backgroundImage: AssetImage('assets/images/PNG/user.png'),
+              // Mostrar la imagen de perfil del usuario o una imagen de placeholder
+              backgroundImage: _image != null
+                  ? FileImage(_image!) // Si hay una imagen, mostrarla
+                  : AssetImage('assets/images/PNG/user.png') as ImageProvider<
+                      Object>, // Convertir a ImageProvider<Object>
             ),
             const SizedBox(
                 height: 8), // Espacio entre la imagen de perfil y el texto
             Text(
-              '${userNameController ?? 'Usuario'}',
+              userName ?? 'Usuario',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -185,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: () => _updateCurrentPage(
           EditProfilePage(
             title: 'Editar perfil',
-            userName: userNameController ?? "",
+            userId: userId ?? 0,
           ),
           'Editar perfil',
         ),
@@ -260,13 +283,14 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: () => LogoutController.logout(
           context,
           setState,
-          userNameController,
+          userId,
           userEmail,
           userFullName,
+          userName,
           currentPage,
         ),
         icon: Icons.logout,
-      ),
+      ), // Resto de elementos del menú...
     ];
   }
 

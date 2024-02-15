@@ -46,6 +46,20 @@ class DBUsers {
     }
   }
 
+  Future<Map<String, dynamic>?> getUserById(int userId) async {
+    final db = await DBUsers.db();
+    final result = await db.query(
+      'users',
+      where: 'id = ?', // Cambio aquí para buscar por ID
+      whereArgs: [userId], // Cambio aquí para pasar el ID como argumento
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+
   Future<Map<String, dynamic>?> getUserByEmailOrUsername(
       String emailOrUsername) async {
     final db = await DBUsers.db();
@@ -64,13 +78,15 @@ class DBUsers {
   }
 
   Future<int> updateUser(
-      int? id,
-      String nombre,
-      String primerApellido,
-      String segundoApellido,
-      String nombre_usuario,
-      String email,
-      String contrasena) async {
+    int? id,
+    String nombre,
+    String primerApellido,
+    String segundoApellido,
+    String nombre_usuario,
+    String email,
+    String contrasena,
+    String? image, // Nuevo parámetro para la ruta de la imagen
+  ) async {
     final db = await DBUsers.db();
     final data = {
       'nombre': nombre,
@@ -78,7 +94,8 @@ class DBUsers {
       'segundo_apellido': segundoApellido,
       'nombre_usuario': nombre_usuario,
       'email': email,
-      'contrasena': contrasena, // Corregir el nombre del parámetro aquí
+      'contrasena': contrasena,
+      'image': image, // Incluir la ruta de la imagen en los datos actualizados
     };
 
     return await db.update('users', data, where: 'id = ?', whereArgs: [id]);

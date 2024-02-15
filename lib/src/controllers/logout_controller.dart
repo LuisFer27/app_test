@@ -4,14 +4,15 @@ class LogoutController {
   static void logout(
     BuildContext context,
     Function setStateCallback,
-    String? userNameController,
+    int? userId,
     String? userEmail,
+    String? userName,
     String? userFullName,
     Widget? currentPage,
   ) {
     setStateCallback(() {
       // Restablece la información del usuario
-      userNameController = null;
+      userId = null;
       userEmail = null;
       userFullName = null;
       currentPage = DashPageState();

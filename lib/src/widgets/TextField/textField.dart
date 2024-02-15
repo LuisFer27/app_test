@@ -4,15 +4,18 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String? Function(String?)? validator;
-  final String? hintText; // Hint opcional
-  final bool readOnly; // Nuevo parámetro readOnly
+  final String? hintText;
+  final bool readOnly;
+  final ValueSetter<String>?
+      onChanged; // Corrección del tipo de parámetro onChanged
 
   const TextInput({
     required this.controller,
     required this.labelText,
     this.validator,
     this.hintText,
-    this.readOnly = false, // Valor por defecto es false
+    this.readOnly = false,
+    this.onChanged,
   });
 
   @override
@@ -21,7 +24,8 @@ class TextInput extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: TextFormField(
         controller: controller,
-        readOnly: readOnly, // Establecer readOnly
+        readOnly: readOnly,
+        onChanged: onChanged, // Utilizar onChanged si se proporciona
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: labelText,

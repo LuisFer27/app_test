@@ -57,27 +57,30 @@ class _LoginPageState extends State<LoginPage> {
                 Btns(
                   menuText: 'Iniciar sesión',
                   onTap: () async {
+                    final currentContext =
+                        context; // Capturar el BuildContext actual
                     if (_formKey.currentState!.validate()) {
                       final user = await dbUsers
                           .getUserByEmailOrUsername(emailController.text);
                       if (user != null &&
                           user['contrasena'] == passwordController.text) {
                         Navigator.push(
-                          context,
+                          currentContext,
                           MaterialPageRoute(
                             builder: (context) => MyHomePage(
                               title: 'Aplicación de prueba',
-                              userNameController: user['nombre_usuario'],
+                              userId: user[
+                                  'id'], // Asegúrate de pasar el userId aquí
                             ),
                           ),
                         );
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                        ScaffoldMessenger.of(currentContext).showSnackBar(
                           const SnackBar(content: Text('Datos incorrectos')),
                         );
                       }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(currentContext).showSnackBar(
                         const SnackBar(
                             content: Text('Por favor llena los campos')),
                       );
