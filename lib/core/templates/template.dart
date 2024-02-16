@@ -23,6 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget? currentPage;
   double menuWidthPercentage = 0.2;
   File? _image; // Agrega una variable de estado para la imagen seleccionada
+  String? _imagePath;
 
   @override
   void initState() {
@@ -37,12 +38,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if (user != null) {
       setState(() {
         this.userId = userId;
-        userName = user['nombre_usuario']; // Aquí cargamos el nombre de usuario
+        userName = user['nombre_usuario'];
         userEmail = user['email'];
         userFullName =
             '${user['nombre']} ${user['primer_apellido']} ${user['segundo_apellido']}';
-        // Cargar la imagen del usuario
-        //_loadUserProfileImage(user['id']); // Asume que 'id' es el ID del usuario
+        // Load the user image if available
+        _imagePath = user['image'];
+        if (_imagePath != null && _imagePath!.isNotEmpty) {
+          _image = File(_imagePath!);
+        }
       });
     }
   }
@@ -185,11 +189,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             CircleAvatar(
               radius: 30,
-              // Mostrar la imagen de perfil del usuario o una imagen de placeholder
               backgroundImage: _image != null
-                  ? FileImage(_image!) // Si hay una imagen, mostrarla
-                  : AssetImage('assets/images/PNG/user.png') as ImageProvider<
-                      Object>, // Convertir a ImageProvider<Object>
+                  ? FileImage(_image!)
+                  : AssetImage('assets/images/PNG/user.png')
+                      as ImageProvider<Object>,
             ),
             const SizedBox(
                 height: 8), // Espacio entre la imagen de perfil y el texto
