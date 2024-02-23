@@ -51,19 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  //Future<void> _loadUserProfileImage(int userId) async {
-  //  final userDirectory = await getApplicationDocumentsDirectory();
-  //  final userAssetsDir = '${userDirectory.path}/user_$userId';
-  //  final imageFileName =
-  //      'profile_image.jpg'; // Nombre de archivo para la imagen de perfil
-  //  final imageFile = File('$userAssetsDir/$imageFileName');
-  //  if (imageFile.existsSync()) {
-  //    setState(() {
-  //      _image = imageFile;
-  //    });
-  //  }
-  //}
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

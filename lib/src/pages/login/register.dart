@@ -17,6 +17,16 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
   final dbUsers = DBUsers();
   final Validations validations = Validations(); // Instancia de Validations
+
+  void _clearForm() {
+    nameController.clear();
+    lastNameController.clear();
+    secondLastNameController.clear();
+    userNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,39 +91,49 @@ class _RegisterPageState extends State<RegisterPage> {
                     return validations.validatePassword(value ?? '');
                   },
                 ),
-                Btns(
-                  menuText: 'Registrar',
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      // Crear un mapa con los datos del usuario
-                      Map<String, dynamic> user = {
-                        'email': emailController.text,
-                        'nombre': nameController.text,
-                        'primer_apellido': lastNameController.text,
-                        'segundo_apellido': secondLastNameController.text,
-                        'contrasena': passwordController.text,
-                        'nombre_usuario': userNameController.text,
-                      };
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Btns(
+                      menuText: 'Registrar',
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // Crear un mapa con los datos del usuario
+                          Map<String, dynamic> user = {
+                            'email': emailController.text,
+                            'nombre': nameController.text,
+                            'primer_apellido': lastNameController.text,
+                            'segundo_apellido': secondLastNameController.text,
+                            'contrasena': passwordController.text,
+                            'nombre_usuario': userNameController.text,
+                          };
 
-                      // Insertar el usuario en la base de datos
-                      await dbUsers.insertUser(user);
+                          // Insertar el usuario en la base de datos
+                          await dbUsers.insertUser(user);
 
-                      // Mostrar mensaje de éxito y regresar a la pantalla de inicio
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Usuario registrado con éxito')),
-                      );
+                          // Mostrar mensaje de éxito y regresar a la pantalla de inicio
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Usuario registrado con éxito')),
+                          );
 
-                      // Regresar a la pantalla de inicio
-                      Navigator.pop(context);
-                    } else {
-                      // Mostrar mensaje de error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('No se pudo registrar el usuario')),
-                      );
-                    }
-                  },
+                          // Regresar a la pantalla de inicio
+                          Navigator.pop(context);
+                        } else {
+                          // Mostrar mensaje de error
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('No se pudo registrar el usuario')),
+                          );
+                        }
+                      },
+                    ),
+                    Btns(
+                      onTap: _clearForm,
+                      menuText: 'Limpiar',
+                    ),
+                  ],
                 ),
               ],
             ),

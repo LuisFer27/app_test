@@ -72,7 +72,7 @@ class _EditProfileState extends State<EditProfilePage> {
 
     // Muestra el mensaje de éxito
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Se han modificado los datos con éxito'),
       ),
     );
@@ -102,6 +102,15 @@ class _EditProfileState extends State<EditProfilePage> {
       // Actualiza la ruta de la imagen en la base de datos
       await updateUserData();
     }
+  }
+
+  void _clearForm() {
+    nameController.clear();
+    lastNameController.clear();
+    secondLastNameController.clear();
+    userNameController.clear();
+    emailController.clear();
+    passwordController.clear();
   }
 
   @override
@@ -137,7 +146,7 @@ class _EditProfileState extends State<EditProfilePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextInput(
                   controller: nameController,
                   labelText: 'Nombre',
@@ -182,14 +191,23 @@ class _EditProfileState extends State<EditProfilePage> {
                     return validations.validatePassword(value ?? '');
                   },
                 ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (_formKey.currentState?.validate() ?? false) {
-                      await updateUserData();
-                    }
-                  },
-                  child: Text('Guardar'),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          await updateUserData();
+                        }
+                      },
+                      child: const Text('Guardar'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _clearForm,
+                      child: const Text('Limpiar'),
+                    ),
+                  ],
                 ),
               ],
             ),
