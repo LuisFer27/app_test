@@ -1,5 +1,4 @@
 import 'package:app_test/core/route.dart';
-import 'package:app_test/core/templates/modal.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key, required this.title});
@@ -26,6 +25,11 @@ class _ListPageState extends State<ListPage> {
     super.initState();
     _refreshData();
     _listController = ListController(context, _refreshData);
+  }
+
+  void _clearList() {
+    _titleController.clear();
+    _descController.clear();
   }
 
   final TextEditingController _titleController = TextEditingController();
@@ -56,23 +60,26 @@ class _ListPageState extends State<ListPage> {
             hintText: "Descripción",
           ),
           const SizedBox(height: 20),
-          Center(
-            child: Btns(
-              onTap: () async {
-                if (id == null) {
-                  await _listController.addData(
-                      _titleController.text, _descController.text);
-                } else {
-                  await _listController.updateData(
-                      id, _titleController.text, _descController.text);
-                }
-                _titleController.text = "";
-                _descController.text = "";
-                Navigator.of(context).pop();
-                print("Datos agregados correctamente");
-              },
-              menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
-            ),
+          Row(
+            children: [
+              Btns(
+                onTap: () async {
+                  if (id == null) {
+                    await _listController.addData(
+                        _titleController.text, _descController.text);
+                  } else {
+                    await _listController.updateData(
+                        id, _titleController.text, _descController.text);
+                  }
+                  _titleController.text = "";
+                  _descController.text = "";
+                  Navigator.of(context).pop();
+                  print("Datos agregados correctamente");
+                },
+                menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
+              ),
+              Btns(menuText: 'Limpiar', onTap: _clearList),
+            ],
           )
         ],
       ),

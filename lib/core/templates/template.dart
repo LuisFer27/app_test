@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          VerticalDivider(
+          const VerticalDivider(
             width: 1,
           ),
           Expanded(
@@ -97,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text(appBarTitle ?? ''),
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: const Icon(Icons.arrow_back),
                   onPressed: () {
                     // Navegar a la página Dash al presionar el botón de atrás
                     _updateCurrentPage(DashPageState(), 'Dash');
@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 actions: [
                   IconButton(
-                    icon: Icon(Icons.logout),
+                    icon: const Icon(Icons.logout),
                     onPressed: () => LogoutController.logout(
                       context,
                       setState,
@@ -135,14 +135,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(appBarTitle ?? ''),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
             _scaffoldKey.currentState!.openDrawer();
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () => LogoutController.logout(
               context,
               setState,
@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
               radius: 30,
               backgroundImage: _image != null
                   ? FileImage(_image!)
-                  : AssetImage('assets/images/PNG/user.png')
+                  : const AssetImage('assets/images/PNG/user.png')
                       as ImageProvider<Object>,
             ),
             const SizedBox(
@@ -207,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Grabar audio',
         onTap: () => _updateCurrentPage(
-          RecordPage(title: 'Grabar audio'),
+          const RecordPage(title: 'Grabar audio'),
           'Grabar audio',
         ),
         icon: Icons.mic,
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Tomar foto',
         onTap: () => _updateCurrentPage(
-          PhotoScreen(title: 'Tomar foto'),
+          const PhotoScreen(title: 'Tomar foto'),
           'Tomar foto',
         ),
         icon: Icons.camera,
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Escanear QR y barcode',
         onTap: () => _updateCurrentPage(
-          QrBarcodePage(title: 'Escanear QR y barcode'),
+          const QrBarcodePage(title: 'Escanear QR y barcode'),
           'Escanear QR y barcode',
         ),
         icon: Icons.qr_code,
@@ -231,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Tomar video',
         onTap: () => _updateCurrentPage(
-          VideoRecord(title: 'Tomar video'),
+          const VideoRecord(title: 'Tomar video'),
           'Tomar video',
         ),
         icon: Icons.video_camera_back,
@@ -239,7 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Lista de ejemplo',
         onTap: () => _updateCurrentPage(
-          ListPage(title: 'Lista de ejemplo'),
+          const ListPage(title: 'Lista de ejemplo'),
           'Lista de ejemplo',
         ),
         icon: Icons.list,
@@ -247,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Lista de categorías',
         onTap: () => _updateCurrentPage(
-          ListCategoriesPage(title: 'Lista de categorías'),
+          const ListCategoriesPage(title: 'Lista de categorías'),
           'Lista de categorías',
         ),
         icon: Icons.list,
@@ -255,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Lista de productos',
         onTap: () => _updateCurrentPage(
-          ListProductsPage(title: 'Lista de productos'),
+          const ListProductsPage(title: 'Lista de productos'),
           'Lista de productos',
         ),
         icon: Icons.shopping_bag,
@@ -263,10 +263,18 @@ class _MyHomePageState extends State<MyHomePage> {
       HamburguerList(
         text: 'Ver ubicación',
         onTap: () => _updateCurrentPage(
-          GeolocatorPage(title: 'Ver ubicación'),
+          const GeolocatorPage(title: 'Ver ubicación'),
           'Ver ubicación',
         ),
         icon: Icons.location_on,
+      ),
+      HamburguerList(
+        text: 'Ver y editar usuarios',
+        onTap: () => _updateCurrentPage(
+          const userManagementPage(title: 'Ver y editar usuarios'),
+          'Ver y editar usuarios',
+        ),
+        icon: Icons.supervised_user_circle,
       ),
       HamburguerList(
         text: 'Cerrar sesión',

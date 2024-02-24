@@ -28,6 +28,10 @@ class _ListProductsState extends State<ListProductsPage> {
     _listProductsController = ListProductsController(context, _refreshData);
   }
 
+  void _clearListProducts() {
+    _descController.clear();
+  }
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final QrBarcodeController _barcodeScannerController = QrBarcodeController();
@@ -63,28 +67,34 @@ class _ListProductsState extends State<ListProductsPage> {
             labelText: 'Descripción',
             hintText: "Descripción",
           ),
-          IconBtns(
-            onTap: () async {
-              String result = await _barcodeScannerController.scanQR();
-              setState(() {
-                _titleController.text = result;
-              });
-            },
-            icon: Icons.qr_code,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconBtns(
+                onTap: () async {
+                  String result = await _barcodeScannerController.scanQR();
+                  setState(() {
+                    _titleController.text = result;
+                  });
+                },
+                icon: Icons.qr_code,
+              ),
+              IconBtns(
+                onTap: () async {
+                  String result =
+                      await _barcodeScannerController.scanBarcodeNormal();
+                  setState(() {
+                    _titleController.text = result;
+                  });
+                },
+                icon: Icons.barcode_reader,
+              ),
+            ],
           ),
-          IconBtns(
-            onTap: () async {
-              String result =
-                  await _barcodeScannerController.scanBarcodeNormal();
-              setState(() {
-                _titleController.text = result;
-              });
-            },
-            icon: Icons.barcode_reader,
-          ),
+
           const SizedBox(height: 20),
-          Center(
-            child: Btns(
+          Row(children: [
+            Btns(
               onTap: () async {
                 if (id == null) {
                   await _listProductsController.addData(
@@ -100,7 +110,8 @@ class _ListProductsState extends State<ListProductsPage> {
               },
               menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
             ),
-          )
+            Btns(menuText: 'Limpiar', onTap: _clearListProducts)
+          ])
         ],
       ),
     );

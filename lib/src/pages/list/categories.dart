@@ -28,6 +28,11 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
     });
   }
 
+  void _clearList() {
+    _titleController.clear();
+    _descController.clear();
+  }
+
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
@@ -56,8 +61,8 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
                   hintText: "Descripción",
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: Btns(
+                Row(children: [
+                  Btns(
                     onTap: () async {
                       if (id == null) {
                         await _listCategoriesController.addData(
@@ -73,7 +78,8 @@ class _ListCategoriesState extends State<ListCategoriesPage> {
                     },
                     menuText: id == null ? "Agregar Datos" : "Actualizar Datos",
                   ),
-                )
+                  Btns(menuText: 'Limpiar', onTap: _clearList),
+                ])
               ],
             ));
   }

@@ -10,3 +10,4 @@ export 'package:app_test/src/pages/barcodeqr/barcode_qr.dart';
 export 'package:app_test/src/pages/list/categories.dart';
 export 'package:app_test/src/pages/login/login.dart';
 export 'package:app_test/src/pages/login/register.dart';
+export 'package:app_test/src/pages/management/user_management.dart';

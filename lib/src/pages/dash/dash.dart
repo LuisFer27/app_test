@@ -6,7 +6,7 @@ class DashPageState extends StatelessWidget {
     return Center(
       child: Container(
         padding: EdgeInsets.all(16.0),
-        child: Text(
+        child: const Text(
           'Selecciona una opción del menú',
           style: TextStyle(fontSize: 18.0),
         ),
