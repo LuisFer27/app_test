@@ -43,10 +43,10 @@ class _ListPageState extends State<ListPage> {
       _descController.text = existingData['desc'];
     }
     showModalBottomSheet(
-      elevation: 5,
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (_) => DataBottomSheetTemplate(
+      builder: (ctx) => DataBottomSheetTemplate(
         fields: [
           TextInput(
             controller: _titleController,
@@ -94,39 +94,38 @@ class _ListPageState extends State<ListPage> {
               itemCount: _allData.length,
               itemBuilder: (context, index) {
                 final rowData = _allData[index];
-                return ListData(
-                  allData: [rowData],
-                  additionalWidgets: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: LabelText(
-                        rowData['title'],
-                        style: const TextStyle(fontSize: 20),
+                return Dismissible(
+                  key: ValueKey(_allData[index]),
+                  onDismissed: (direction) {
+                    _listController.deleteData(rowData['id']);
+                  },
+                  child: ListData(
+                    allData: [rowData],
+                    additionalWidgets: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: LabelText(
+                          rowData['title'],
+                          style: const TextStyle(fontSize: 20),
+                        ),
                       ),
-                    ),
-                    LabelText(
-                      rowData['desc'],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconBtns(
-                          onTap: () {
-                            showBottomSheet(rowData['id']);
-                          },
-                          icon: Icons.edit,
-                          color: Colors.indigo,
-                        ),
-                        IconBtns(
-                          onTap: () {
-                            _listController.deleteData(rowData['id']);
-                          },
-                          icon: Icons.delete,
-                          color: Colors.redAccent,
-                        ),
-                      ],
-                    ),
-                  ],
+                      LabelText(
+                        rowData['desc'],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconBtns(
+                            onTap: () {
+                              showBottomSheet(rowData['id']);
+                            },
+                            icon: Icons.edit,
+                            color: Colors.indigo,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             ),

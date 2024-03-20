@@ -44,10 +44,10 @@ class _ListProductsState extends State<ListProductsPage> {
       _descController.text = existingData['desc'];
     }
     showModalBottomSheet(
-      elevation: 5,
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (_) => DataBottomSheetTemplate(
+      builder: (ctx) => DataBottomSheetTemplate(
         fields: [
           TextInput(
             controller: _titleController,
@@ -55,13 +55,6 @@ class _ListProductsState extends State<ListProductsPage> {
             hintText: "Titulo",
             readOnly: true,
           ),
-          //ReusableDropdown<String>(
-          //  items: ['Apple', 'Banana', 'Orange'],
-          //  selectedValue: 'Apple',
-          //  onChanged: (value) {
-          //    print('Selected fruit: $value');
-          //  },
-          //),
           TextInput(
             controller: _descController,
             labelText: 'Descripción',
@@ -91,7 +84,6 @@ class _ListProductsState extends State<ListProductsPage> {
               ),
             ],
           ),
-
           const SizedBox(height: 20),
           Row(children: [
             Btns(
@@ -125,40 +117,40 @@ class _ListProductsState extends State<ListProductsPage> {
           : ListView.builder(
               itemCount: _allData.length,
               itemBuilder: (context, index) {
-                final rowData = _allData[index];
-                return ListData(
-                  allData: [rowData],
-                  additionalWidgets: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: LabelText(
-                        rowData['title'],
-                        style: const TextStyle(fontSize: 20),
+                final rowData =
+                    _allData[index]; // Aquí debes declarar la variable
+                return Dismissible(
+                  key: ValueKey(_allData[index]),
+                  onDismissed: (direction) {
+                    _listProductsController.deleteData(rowData['id']);
+                  },
+                  child: ListData(
+                    allData: [rowData],
+                    additionalWidgets: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: LabelText(
+                          rowData['title'],
+                          style: const TextStyle(fontSize: 20),
+                        ),
                       ),
-                    ),
-                    LabelText(
-                      rowData['desc'],
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconBtns(
-                          onTap: () {
-                            showBottomSheet(rowData['id']);
-                          },
-                          icon: Icons.edit,
-                          color: Colors.indigo,
-                        ),
-                        IconBtns(
-                          onTap: () {
-                            _listProductsController.deleteData(rowData['id']);
-                          },
-                          icon: Icons.delete,
-                          color: Colors.redAccent,
-                        ),
-                      ],
-                    ),
-                  ],
+                      LabelText(
+                        rowData['desc'],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconBtns(
+                            onTap: () {
+                              showBottomSheet(rowData['id']);
+                            },
+                            icon: Icons.edit,
+                            color: Colors.indigo,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
