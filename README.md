@@ -1,6 +1,6 @@
 # App_test
 
-Aplicación que permite crear catalogos y registrar productos sin embargo esta aplicación sigue en desarrollo y en busca de mejoras para la misma 
+Aplicación que permite crear catalogos y registrar productos sin embargo esta aplicación sigue en desarrollo y en busca de mejoras para la misma
 
 ## Descarga e instalación.
 
@@ -47,8 +47,7 @@ void main() {
 
 en este caso en el editor le daremos click en run
 
-
-depende del dispositivo que dispongamos este se ejecutar si no podemos cambiarlo abajo de nuestra editor ![1716255912731](image/README/1716255912731.png)
+depende del dispositivo que dispongamos este se ejecutar si no podemos cambiarlo abajo de nuestro editor ![1716255912731](image/README/1716255912731.png)
 
 y escoger nuestro dispositivo principalmente movil ya que en este caso podemos seleccionar movil o virtual como en este ejemplo
 
@@ -70,7 +69,6 @@ botón registrar: agrega los datos en una base de datos mediante sqlite ya que e
 
 limpiar:limpia los datos del formulario
 
-
 ![1716256709230](image/README/1716256709230.png)
 
 Rellenado de datos permite rellenar los campos mediante los datos prporcionados
@@ -87,12 +85,12 @@ Tomar foto:permite tomar fotos usuando la camara
 
 Escanear qr y barcode permite escanear codigos de barra y registrar el producto
 
-Tomar video permite captiurar video usando la camara del celular solo que de forma con limte de 5 segundos 
+Tomar video permite captiurar video usando la camara del celular solo que de forma con limte de 5 segundos
 
 Listas de ejemplos,categorias y de productos :Catalogos para la visualización
 
 Ver ubicación:permite ver la ubicación del dispositivo
 
-Ver y editar usuarios esta funcion de momento no esta disponible pero sirve para ver la información de los usuarios que se han registrado 
+Ver y editar usuarios esta funcion de momento no esta disponible pero sirve para ver la información de los usuarios que se han registrado
 
 Cerrar sesión vuele a la pantalla de inicio
