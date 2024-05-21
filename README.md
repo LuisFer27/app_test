@@ -33,7 +33,7 @@ Paso 5 abriremos la carpeta lib y nos dirigiremos al archivo main .dart
 
 ![1716255777424](image/README/1716255777424.png)
 
-abrimos el archivo main.dart y se nos visualizara de esta forma ya que aquí al ser la primera aplicación que se trabajo en fluter se simplifco todo para que solo funcionara a partir de aqui ya que en routes especificamente en la carpeta templates se encuentra l archivo donde esta la función
+abrimos el archivo main.dart y se nos visualizara de esta forma ya que aquí al ser la primera aplicación que se trabajo en fluter se simplifco todo para que solo funcionara a partir de aqui ya que en routes especificamente en la carpeta templates se encuentra el archivo donde esta la función
 
 ```dart
 import 'package:app_test/core/route.dart';
